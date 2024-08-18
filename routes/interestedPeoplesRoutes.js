@@ -3,8 +3,14 @@ const interestedPeoplesControllers = require("../controllers/interestedPeoplesCo
 const { prepath } = require('../utilities');
 
 const interestedPeoplesRoutes = (app) => {
-    app.get(`${prepath}/property/:property_id/interested/peoples`, middlewares.isAuthenticate, interestedPeoplesControllers.getPropertyInterestedPeople);
-    app.post(`${prepath}/list/interested/person`, middlewares.isAuthenticate, interestedPeoplesControllers.createInterestedPerson);
+    app.get(`${prepath}/property/:property_id/interested/peoples`,
+        middlewares.isAuthenticate,
+        middlewares.checkSubscription,
+        interestedPeoplesControllers.getPropertyInterestedPeople);
+    app.post(`${prepath}/list/interested/person`,
+        middlewares.isAuthenticate,
+        middlewares.checkSubscription,
+        interestedPeoplesControllers.createInterestedPerson);
 
 }
 

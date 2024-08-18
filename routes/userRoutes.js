@@ -7,11 +7,13 @@ const { prepath } = require('../utilities');
 
 
 const userRoutes = (app) => {
-    app.get(`${prepath}/get/user`, middlewares.isAuthenticate, userControllers.getUser)
+    app.get(`${prepath}/get/user`, middlewares.isAuthenticate,
+        userControllers.getUser)
     app.post(`${prepath}/role`, middlewares.isAuthenticate,
         userValidator.updateRoleValidator, validate,
         userControllers.updateRole);
     app.post(`${prepath}/update/profile/info`, middlewares.isAuthenticate,
+        middlewares.checkSubscription,
         userValidator.updateProfileInfoValidator, validate,
         userControllers.updateProfileInfo);
 }

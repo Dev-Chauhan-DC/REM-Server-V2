@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 const authServices = require('../services/authServices')
 const responseUtilities = require('../utilities/responseUtilities');
-const {internalServerError500, ok200, badRequest400} = require("../utilities/responseUtility");
+const { internalServerError500, ok200, badRequest400 } = require("../utilities/responseUtility");
 const responses = new responseUtilities();
-const {TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_SERVICE_SID} = process.env;
+const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_SERVICE_SID } = process.env;
 const client = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, {
     lazyLoading: true
 })
@@ -30,7 +30,7 @@ const auth = async (req, res) => {
                 return res.status(400).send(responses.badRequest400("Unable to create account"))
             }
 
-            const token = jwt.sign({id: createPhone.id}, process.env.JWT_KEY, {expiresIn: "5d"})
+            const token = jwt.sign({ id: createPhone.id }, process.env.JWT_KEY, { expiresIn: "5d" })
             const data = {
                 ...createPhone,
                 token
@@ -51,7 +51,7 @@ const auth = async (req, res) => {
             return res.status(400).send(responses.badRequest400("Incorrect OTP"))
         }
 
-        const token = jwt.sign({id: isPhonePresent.id}, process.env.JWT_KEY, {expiresIn: "5d"})
+        const token = jwt.sign({ id: isPhonePresent.id }, process.env.JWT_KEY, { expiresIn: "5d" })
 
         const data = {
             ...isPhonePresent,
@@ -74,9 +74,9 @@ const sendOtp = async (req, res) => {
     try {
         const phone = req.body.phone;
 
-        const {ENV, TESTING_NUMBER} = process.env;
+        const { ENV, TESTING_NUMBER } = process.env;
 
-        if(ENV === "development" || phone === TESTING_NUMBER ){
+        if (ENV === "development" || phone === TESTING_NUMBER) {
             return res.status(200).send(ok200("Dummy OTP Success"))
         }
 
@@ -97,13 +97,13 @@ const sendOtp = async (req, res) => {
 }
 
 const verifyOtp = async (req, res) => {
-    const {phone, otp} = req.body;
+    const { phone, otp } = req.body;
     try {
-        const {ENV, TESTING_OTP} = process.env;
+        const { ENV, TESTING_OTP } = process.env;
 
 
-        if(ENV !== "development"){
-            if(TESTING_OTP != otp){
+        if (ENV !== "development") {
+            if (TESTING_OTP != otp) {
                 const verifyResponse = await client.verify.v2.services(TWILIO_SERVICE_SID).verificationChecks.create(
                     {
                         to: `+91${phone}`,
@@ -128,7 +128,7 @@ const verifyOtp = async (req, res) => {
                 return res.status(400).send(responses.badRequest400("Unable to create account"))
             }
 
-            const token = jwt.sign({id: createPhone.id}, process.env.JWT_KEY, {expiresIn: "10d"})
+            const token = jwt.sign({ id: createPhone.id }, process.env.JWT_KEY, { expiresIn: "10d" })
 
             const data = {
                 ...createPhone,
@@ -144,7 +144,7 @@ const verifyOtp = async (req, res) => {
 
         }
 
-        const token = jwt.sign({id: isPhonePresent.id}, process.env.JWT_KEY, {expiresIn: "10d"})
+        const token = jwt.sign({ id: isPhonePresent.id }, process.env.JWT_KEY, { expiresIn: "10d" })
 
         const data = {
             ...isPhonePresent,
@@ -166,4 +166,4 @@ const verifyOtp = async (req, res) => {
 
 
 
-module.exports = {auth, sendOtp, verifyOtp}
+module.exports = { auth, sendOtp, verifyOtp }

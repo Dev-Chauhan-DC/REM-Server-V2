@@ -55,4 +55,29 @@ const isUserSubscriptionActive = async (req, res, next) => {
 }
 
 
-module.exports = {isAuthenticate, isUserSubscriptionActive}
+
+const checkSubscription = async (req, res, next) => {
+    try {
+
+        const user = await UserModel.findOne({
+            where: {
+                id: req.userId
+            }
+        })
+
+        if (!user) {
+            return res.status(404).send(responses.notFound404("User not found", null))
+        }
+
+        if (user.is_subscription_active === 0 || user.is_subscription_active === null) {
+            return res.status(404).send(responses.notFound404("Subscription not active", null))
+        }
+        return next()
+
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+
+module.exports = { isAuthenticate, isUserSubscriptionActive, checkSubscription }

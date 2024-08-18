@@ -7,11 +7,13 @@ const { prepath } = require('../utilities');
 const fileRoutes = (app) => {
     app.post(`${prepath}/file/create`,
         middlewares.isAuthenticate,
+        middlewares.checkSubscription,
         fileValidator.createFile,
         fileControllers.createFile);
 
     app.post(`${prepath}/file/read`,
         middlewares.isAuthenticate,
+        middlewares.checkSubscription,
         fileControllers.readFile);
 
 

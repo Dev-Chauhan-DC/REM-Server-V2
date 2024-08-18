@@ -8,12 +8,12 @@ const { prepath } = require('../utilities');
 
 const propertyRoutes = (app) => {
 
-    app.post(`${prepath}/list/property`, middlewares.isAuthenticate, propertyValidator.createProperty, validate, propertyControllers.createProperty);
-    app.get(`${prepath}/user/properties`, middlewares.isAuthenticate, propertyControllers.getUserProperties);
-    app.delete(`${prepath}/property/:property_id`, middlewares.isAuthenticate, propertyControllers.deleteProperty);
-    app.get(`${prepath}/properties/:swlat/:swlong/:nelat/:nelong`, middlewares.isAuthenticate, propertyControllers.getPropertiesSearchResult);
-    app.post(`${prepath}/property`, middlewares.isAuthenticate, propertyControllers.getProperty);
-    app.get(`${prepath}/properties`, middlewares.isAuthenticate, propertyValidator.getProperties, propertyControllers.getProperties);
+    app.post(`${prepath}/list/property`, middlewares.isAuthenticate, middlewares.checkSubscription, propertyValidator.createProperty, validate, propertyControllers.createProperty);
+    app.get(`${prepath}/user/properties`, middlewares.isAuthenticate, middlewares.checkSubscription, propertyControllers.getUserProperties);
+    app.delete(`${prepath}/property/:property_id`, middlewares.isAuthenticate, middlewares.checkSubscription, propertyControllers.deleteProperty);
+    app.get(`${prepath}/properties/:swlat/:swlong/:nelat/:nelong`, middlewares.isAuthenticate, middlewares.checkSubscription, propertyControllers.getPropertiesSearchResult);
+    app.post(`${prepath}/property`, middlewares.isAuthenticate, middlewares.checkSubscription, propertyControllers.getProperty);
+    app.get(`${prepath}/properties`, middlewares.isAuthenticate, middlewares.checkSubscription, propertyValidator.getProperties, propertyControllers.getProperties);
 
 }
 
