@@ -8,6 +8,7 @@ const client = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, {
     lazyLoading: true
 })
 const otpVerification = require('../utilities/2fectorUtility')
+const { parsePhoneNumberFromString } = require('libphonenumber-js');
 
 const auth = async (req, res) => {
 
@@ -98,6 +99,16 @@ const sendOtp = async (req, res) => {
 
 const verifyOtp = async (req, res) => {
     const { phone, otp } = req.body;
+
+    if (typeof phone !== 'string') {
+        return res.status(400).send(responses.badRequest400('Phone number must be a string.'));
+    }
+
+    const phoneNumber = parsePhoneNumberFromString(phone, 'IN');
+    if (!phoneNumber) {
+        return res.status(400).send(responses.badRequest400('Invalid phone number', phone));
+    }
+    const formatedPhone = phoneNumber.format('E.164');
     try {
         const { ENV, TESTING_OTP } = process.env;
 
@@ -118,7 +129,7 @@ const verifyOtp = async (req, res) => {
         // }
         if (ENV !== "development") {
             if (TESTING_OTP != otp) {
-                const verifyOtp = await otpVerification.verifyOtp(phone, otp)
+                const verifyOtp = await otpVerification.verifyOtp(formatedPhone, otp)
 
                 if (!verifyOtp.status) {
                     return res.status(400).send(badRequest400(verifyOtp.message))
@@ -128,11 +139,11 @@ const verifyOtp = async (req, res) => {
         }
 
 
-        const isPhonePresent = await authServices.readPhone(phone);
+        const isPhonePresent = await authServices.readPhone(formatedPhone);
 
         if (!isPhonePresent) {
 
-            const createPhone = await authServices.createPhone(phone);
+            const createPhone = await authServices.createPhone(formatedPhone);
 
             if (!createPhone) {
                 return res.status(400).send(responses.badRequest400("Unable to create account"))
