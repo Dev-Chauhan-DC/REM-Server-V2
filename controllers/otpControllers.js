@@ -8,8 +8,7 @@ const moment = require('moment');
 
 const sendOtp = async (req, res) => {
     try {
-        const phone = req.params.phone;
-        console.log(phone);
+        const phone = req.body.phone;
         const phoneNumber = parsePhoneNumberFromString(phone, 'IN');
         if (!phoneNumber) {
             return res.status(400).send(responses.badRequest400('Invalid phone number', phone));
