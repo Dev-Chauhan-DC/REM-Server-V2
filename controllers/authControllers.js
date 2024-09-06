@@ -7,7 +7,7 @@ const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_SERVICE_SID } = process.en
 const client = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, {
     lazyLoading: true
 })
-
+const otpVerification = require('../utilities/2fectorUtility')
 
 const auth = async (req, res) => {
 
@@ -102,16 +102,26 @@ const verifyOtp = async (req, res) => {
         const { ENV, TESTING_OTP } = process.env;
 
 
+        // if (ENV !== "development") {
+        //     if (TESTING_OTP != otp) {
+        //         const verifyResponse = await client.verify.v2.services(TWILIO_SERVICE_SID).verificationChecks.create(
+        //             {
+        //                 to: `+91${phone}`,
+        //                 code: otp
+        //             })
+
+        //         if (!verifyResponse.valid) {
+        //             return res.status(400).send(badRequest400("Invalid OTP"))
+        //         }
+        //     }
+
+        // }
         if (ENV !== "development") {
             if (TESTING_OTP != otp) {
-                const verifyResponse = await client.verify.v2.services(TWILIO_SERVICE_SID).verificationChecks.create(
-                    {
-                        to: `+91${phone}`,
-                        code: otp
-                    })
+                const verifyOtp = await otpVerification.verifyOtp(phone, otp)
 
-                if (!verifyResponse.valid) {
-                    return res.status(400).send(badRequest400("Invalid OTP"))
+                if (!verifyOtp.status) {
+                    return res.status(400).send(badRequest400(verifyOtp.message))
                 }
             }
 

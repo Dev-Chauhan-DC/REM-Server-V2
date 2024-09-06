@@ -11,6 +11,7 @@ const paymentRoutes = require('./paymentRoutes')
 const userSubscription = require('./userSubscriptionRoutes')
 const fileRoutes = require('./fileRoutes')
 const googleGeoRouter = require('./googleGeoRouter')
+const otpRoutes = require('./otpRoutes')
 
 
 const index = (app) => {
@@ -29,6 +30,7 @@ const index = (app) => {
     userSubscription(app)
     fileRoutes(app)
     googleGeoRouter(app)
+    otpRoutes(app)
 
 
 }
