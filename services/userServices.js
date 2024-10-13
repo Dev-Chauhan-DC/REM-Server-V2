@@ -42,8 +42,8 @@ const getUser = async (userId) => {
 }
 
 const updateProfileInfo = async (userId, email, firstName, lastName,
-                                 secondaryNumber, aadhaarNumber, avatar, agencyName,
-                                 companyName) => {
+    secondaryNumber, aadhaarNumber, avatar, agencyName,
+    companyName) => {
 
     try {
         const profileInfo = await UserModel.update(
@@ -58,7 +58,7 @@ const updateProfileInfo = async (userId, email, firstName, lastName,
                 company_name: companyName
             },
             {
-                where: {id: userId}
+                where: { id: userId }
             }
         )
 
@@ -70,5 +70,18 @@ const updateProfileInfo = async (userId, email, firstName, lastName,
 
 }
 
+const findOneUser = async (data) => {
+    try {
+        const user = await UserModel.findOne(data);
+        return user;
+    } catch (e) {
+        console.error(e)
+        throw e;
+    }
+}
 
-module.exports = {updateRole, getUser, updateProfileInfo}
+
+
+
+
+module.exports = { updateRole, getUser, updateProfileInfo, findOneUser }

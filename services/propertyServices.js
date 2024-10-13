@@ -167,9 +167,42 @@ const deleteProperty = async (propertyId, userId) => {
 
 }
 
-const getPropertiesSearchResult = async (swlat, swlong, nelat, nelong, filters, page, view, userId) => {
+const getPropertiesSearchResult = async (swlat, swlong, nelat, nelong, filters, page, view, userId, limitA) => {
 
     try {
+
+        const includesArray = [
+            {
+                model: PropertyPhotos
+            },
+            {
+                model: UserModel,
+                ...(filters.userRoleId ?
+                    {
+                        where: {
+                            user_roles_id: {
+                                [Op.in]: filters.userRoleId
+                            }
+                        }
+                    } : {}),
+                attributes: ["agency_name", "company_name", "user_roles_id"],
+                include: [
+                    {
+                        model: UserRolesModel,
+                    },
+
+                ],
+            }
+        ]
+
+        if (userId) {
+            includesArray.push({
+                model: SavePropertyModel,
+                where: { user_id: userId },
+                required: false
+            })
+        }
+
         if (filters.sorting) {
             if (filters.sorting?.length >= 2) {
                 if (filters.sorting[1] === "highToLow") {
@@ -184,7 +217,7 @@ const getPropertiesSearchResult = async (swlat, swlong, nelat, nelong, filters, 
             }
         }
 
-        const limit = 3;
+        const limit = limitA ? limitA : 3;
         const offset = (page - 1) * limit;
 
 
@@ -218,38 +251,7 @@ const getPropertiesSearchResult = async (swlat, swlong, nelat, nelong, filters, 
                 {
                     limit: limit,
                     offset: offset,
-                    include: [
-                        {
-                            model: PropertyPhotos
-                        },
-                        {
-                            model: UserModel,
-                            ...(filters.userRoleId ?
-                                {
-                                    where: {
-                                        user_roles_id: {
-                                            [Op.in]: filters.userRoleId
-                                        }
-                                    }
-                                } : {}),
-                            attributes: ["agency_name", "company_name", "user_roles_id"],
-                            include: [
-                                {
-                                    model: UserRolesModel,
-                                },
-
-                            ],
-
-
-                        },
-                        {
-                            model: SavePropertyModel,
-                            where: { user_id: userId },
-                            required: false
-                        }
-
-
-                    ],
+                    include: includesArray,
                     ...(filters.sorting ?
                         { order: [filters.sorting] } : {})
                 }
@@ -357,6 +359,78 @@ const getPropertiesSearchResult = async (swlat, swlong, nelat, nelong, filters, 
 
 const getProperty = async (propertyId, view, userId) => {
 
+    const includesFull = [
+        {
+            model: PropertyAmenities,
+            include: [
+                {
+                    model: AmenityModel
+                }
+            ]
+        },
+        {
+            model: PropertyPhotos
+        },
+        {
+            model: InterestedPeoplesModel,
+            include: [
+                {
+                    model: UserModel,
+
+                }
+
+            ]
+        },
+        {
+            model: PurposeModel,
+        },
+        {
+            model: HomeTypeModel,
+        },
+        {
+            model: FacingModel,
+        },
+        {
+            model: FlooringTypeModel,
+        },
+        {
+            model: OwnershipTypeModel,
+        },
+        {
+            model: AvailabilityTypeModel,
+        },
+        {
+            model: FurnishingsModel,
+        },
+        {
+            model: KitchenTypesModel,
+        },
+        {
+            model: WaterSuppliesModel,
+        },
+        {
+            model: PowerBackupsModel,
+        },
+        {
+            model: PossessionsModel,
+        },
+        {
+            model: TenantsModel,
+        },
+        {
+            model: UserModel
+        }
+
+    ]
+
+    if (userId) {
+        includesFull.push({
+            model: SavePropertyModel,
+            where: { user_id: userId },
+            required: false
+        })
+    }
+
     try {
         const property = await PropertyModel.findOne({
             where: {
@@ -377,73 +451,7 @@ const getProperty = async (propertyId, view, userId) => {
                         }
                     ]
                 },]
-                : [
-                    {
-                        model: PropertyAmenities,
-                        include: [
-                            {
-                                model: AmenityModel
-                            }
-                        ]
-                    },
-                    {
-                        model: PropertyPhotos
-                    },
-                    {
-                        model: InterestedPeoplesModel,
-                        include: [
-                            {
-                                model: UserModel,
-
-                            }
-
-                        ]
-                    },
-                    {
-                        model: PurposeModel,
-                    },
-                    {
-                        model: HomeTypeModel,
-                    },
-                    {
-                        model: FacingModel,
-                    },
-                    {
-                        model: FlooringTypeModel,
-                    },
-                    {
-                        model: OwnershipTypeModel,
-                    },
-                    {
-                        model: AvailabilityTypeModel,
-                    },
-                    {
-                        model: FurnishingsModel,
-                    },
-                    {
-                        model: KitchenTypesModel,
-                    },
-                    {
-                        model: WaterSuppliesModel,
-                    },
-                    {
-                        model: PowerBackupsModel,
-                    },
-                    {
-                        model: PossessionsModel,
-                    },
-                    {
-                        model: TenantsModel,
-                    },
-                    {
-                        model: UserModel
-                    },
-                    {
-                        model: SavePropertyModel,
-                        where: { user_id: userId },
-                        required: false
-                    },
-                ],
+                : includesFull,
 
         })
 

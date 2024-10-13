@@ -1,9 +1,9 @@
-const {badRequest400} = require("../utilities/responseUtility");
-const {body} = require('express-validator');
+const { badRequest400 } = require("../utilities/responseUtility");
+const { body, param, query } = require('express-validator');
 
 
 const getProperties = (req, res, next) => {
-    const {ids} = req.query
+    const { ids } = req.query
     const idArray = ids.split(',');
     const numericArray = idArray.map(Number);
 
@@ -23,7 +23,7 @@ const createProperty = [
         .notEmpty().withMessage('House Type is Required')
         .isInt().withMessage('Invalid House Type')
         .isIn([1, 2, 3, 4]).withMessage('House Type must be 1, 2, 3, or 4'),
-    body('address').isLength({min: 11})
+    body('address').isLength({ min: 11 })
         .withMessage('Address must be longer than 10 characters'),
     body('bedroomCount')
         .notEmpty().withMessage('Please Select Bedroom')
@@ -42,20 +42,20 @@ const createProperty = [
         .isIn([0, 1, 2, 3, 4, 5]).withMessage('Bedroom must be 0, 1, 2, 3, 4 or 5'),
     body('builtUpArea')
         .notEmpty().withMessage('Please Enter Built Up Area')
-        .isFloat({gt: 0}).withMessage('Built Up Area must be a positive number')
-        .isFloat({lt: 5000001}).withMessage('Built Up Area must be a less then 5000001'),
+        .isFloat({ gt: 0 }).withMessage('Built Up Area must be a positive number')
+        .isFloat({ lt: 5000001 }).withMessage('Built Up Area must be a less then 5000001'),
     body('carpetArea')
         .notEmpty().withMessage('Please Enter Carpet Area')
-        .isFloat({gt: 0}).withMessage('Carpet Area must be a positive number')
-        .isFloat({lt: 5000001}).withMessage('Carpet Area must be a less then 5000001')
-        .custom((value, {req}) => {
+        .isFloat({ gt: 0 }).withMessage('Carpet Area must be a positive number')
+        .isFloat({ lt: 5000001 }).withMessage('Carpet Area must be a less then 5000001')
+        .custom((value, { req }) => {
             if (parseFloat(value) > parseFloat(req.body.builtUpArea)) {
                 throw new Error('Carpet Area must be equal to or greater than Built Up Area');
             }
             return true;
         }),
     body('plotArea')
-        .custom((value, {req}) => {
+        .custom((value, { req }) => {
             if (parseInt(req.body.homeTypeId) == 1 || parseInt(req.body.homeTypeId) == 3) {
                 return true;
             }
@@ -87,12 +87,12 @@ const createProperty = [
         .isIn([1, 2, 3, 4, 5, 6, 7, 8]).withMessage('Invalid Facing'),
     body('propertyAge')
         .notEmpty().withMessage("Please Enter Property Age")
-        .isFloat({gt: -1, lt: 101}).withMessage("Property age must in between 1 to 100"),
+        .isFloat({ gt: -1, lt: 101 }).withMessage("Property age must in between 1 to 100"),
     body('totalFloor')
         .notEmpty().withMessage('Please enter total floor')
-        .isInt({gt: -1, lt: 201}).withMessage("Total floor must in between 1 to 200"),
+        .isInt({ gt: -1, lt: 201 }).withMessage("Total floor must in between 1 to 200"),
     body('propertyFloor')
-        .custom((value, {req}) => {
+        .custom((value, { req }) => {
             if (parseInt(req.body.homeTypeId) == 2 || parseInt(req.body.homeTypeId) == 4) {
                 return true;
             }
@@ -119,7 +119,7 @@ const createProperty = [
         .notEmpty().withMessage("Please Select Flooring Type")
         .isIn([1, 2, 3, 4, 5]).withMessage('Invalid Flooring Type'),
     body('ownershipTypeId')
-        .custom((value, {req}) => {
+        .custom((value, { req }) => {
             if (parseInt(req.body.purposeId) == 2) {
                 return true;
             }
@@ -146,10 +146,10 @@ const createProperty = [
         .isFloat().withMessage('Longitude must be float'),
     body('price')
         .notEmpty().withMessage('Please Enter Price')
-        .isInt({gt: 0, lt: 10000000001}).withMessage('Price must be greater then 0 and less then 10000000001'),
+        .isInt({ gt: 0, lt: 10000000001 }).withMessage('Price must be greater then 0 and less then 10000000001'),
     body('maintenance')
         .notEmpty().withMessage('Please Enter Maintenance')
-        .isInt({gt: -1, lt: 10000000001}).withMessage('Maintenance must be greater then -1 and less then 10000000001'),
+        .isInt({ gt: -1, lt: 10000000001 }).withMessage('Maintenance must be greater then -1 and less then 10000000001'),
     body('availabilityTypeId')
         .notEmpty().withMessage('Please Select Availability Type')
         .isIn([1, 2, 3, 4]).withMessage('Availability Type must be 1,2,3 or 4'),
@@ -170,12 +170,12 @@ const createProperty = [
         .isIn([1, 2, 3]).withMessage('kitchen Types must be 0,1,2,3,4 or 5'),
     body('propertyDescription')
         .notEmpty().withMessage('Please Enter Property Description')
-        .isLength({min: 10}).withMessage("Minimum length is 10"),
+        .isLength({ min: 10 }).withMessage("Minimum length is 10"),
     body('possessionsId')
         .notEmpty().withMessage('Please Select Possession Status')
         .isIn([1, 2]).withMessage('Possession Status Must be 1 or 2'),
     body('flatsInBuilding')
-        .custom((value, {req}) => {
+        .custom((value, { req }) => {
             if (parseInt(req.body.homeTypeId) == 2 || parseInt(req.body.homeTypeId) == 4) {
                 return true;
             }
@@ -196,9 +196,9 @@ const createProperty = [
         }),
     body('deposit')
         .notEmpty().withMessage('Please Enter deposit')
-        .isInt({gt: 0, lt: 10000000001}).withMessage('Deposit must be greater then 0 and less then 10000000001'),
+        .isInt({ gt: 0, lt: 10000000001 }).withMessage('Deposit must be greater then 0 and less then 10000000001'),
     body('tenantsId')
-        .custom((value, {req}) => {
+        .custom((value, { req }) => {
             if (parseInt(req.body.purposeId) == 1) {
                 return true;
             }
@@ -219,5 +219,10 @@ const createProperty = [
         })
     ,
 ];
+const getPropertiesSearchResult = [
+    query('limit')
+        .optional()
+        .isInt().withMessage('Limit must be an integer')
+];
 
-module.exports = {getProperties, createProperty}
+module.exports = { getProperties, createProperty, getPropertiesSearchResult }

@@ -206,7 +206,10 @@ const getPropertiesSearchResult = async (req, res) => {
         const nelat = parseFloat(req.params.nelat)
         const nelong = parseFloat(req.params.nelong)
 
-        const response = await propertyServices.getPropertiesSearchResult(swlat, swlong, nelat, nelong, filters, page, view, userId)
+
+        const limit = req?.query?.limit ? parseInt(req?.query?.limit) : undefined;
+
+        const response = await propertyServices.getPropertiesSearchResult(swlat, swlong, nelat, nelong, filters, page, view, userId, limit)
 
 
         //Property Photos
@@ -233,7 +236,7 @@ const getPropertiesSearchResult = async (req, res) => {
                 message: "successful",
                 status: true,
                 data: response,
-                currentUserId: userId
+                currentUserId: userId ? userId : null
             })
         }
 

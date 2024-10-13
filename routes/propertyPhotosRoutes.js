@@ -6,10 +6,9 @@ const { prepath } = require('../utilities');
 
 
 const propertyPhotosRoutes = (app) => {
-    // app.post("/list/property/images", middlewares.isAuthenticate, propertyPhotosControllers.createPropertyImages);
+    // app.post("/list/property/images", propertyPhotosControllers.createPropertyImages);
     app.post(`${prepath}/list/property/images/file/id`,
-        middlewares.isAuthenticate,
-        middlewares.checkSubscription,
+
         createPropertyImageFilesValidator,
         validate,
         propertyPhotosControllers.createPropertyImageFiles);

@@ -4,8 +4,8 @@ const { prepath } = require('../utilities');
 
 
 const paymentRoutes = (app) => {
-    app.post(`${prepath}/payment/generate-order-id`, middlewares.isAuthenticate, paymentControllers.generateOrderId);
-    app.post(`${prepath}/payment/create/order`, middlewares.isAuthenticate, paymentControllers.createOrder);
+    app.post(`${prepath}/payment/generate-order-id`, paymentControllers.generateOrderId);
+    app.post(`${prepath}/payment/create/order`, paymentControllers.createOrder);
 }
 
 

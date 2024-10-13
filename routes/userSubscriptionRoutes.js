@@ -8,8 +8,8 @@ const { prepath } = require('../utilities');
 const userSubscription = (app) => {
 
     app.get(`${prepath}/user/is-subscription-active`, middlewares.isUserSubscriptionActive, userSubscriptionControllers.isUserSubscriptionActive)
-    app.post(`${prepath}/payment/user-subscription/successful`, middlewares.isAuthenticate, userSubscriptionControllers.userSubscriptionSuccessful);
-    app.post(`${prepath}/create/subscription`, middlewares.isAuthenticate,
+    app.post(`${prepath}/payment/user-subscription/successful`, userSubscriptionControllers.userSubscriptionSuccessful);
+    app.post(`${prepath}/create/subscription`,
         subscriptionValidator.createSubscription,
         validate,
         userSubscriptionControllers.createSubscription);
