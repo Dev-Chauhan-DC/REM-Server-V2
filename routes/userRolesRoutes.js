@@ -7,7 +7,7 @@ const { prepath } = require('../utilities');
 
 
 const userRolesRoutes = (app) => {
-    app.get(`${prepath}/roles`, middlewares.isAuthenticate, middlewares.checkSubscription, userRolesControllers.getRoles);
+    app.get(`${prepath}/roles`, userRolesControllers.getRoles);
 }
 
 

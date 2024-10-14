@@ -64,4 +64,20 @@ const updateProfileInfo = async (req, res) => {
 }
 
 
-module.exports = { updateRole, getUser, updateProfileInfo }
+const getUserV2 = async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const user = await userServices.findOneUser({
+            where: {
+                id: id
+            }
+        })
+        return res.status(200).send(responses.ok200('', user))
+    } catch (e) {
+        console.error(error);
+        return res.status(500).send(responses.internalServerError500());
+    }
+}
+
+
+module.exports = { updateRole, getUser, updateProfileInfo, getUserV2 }

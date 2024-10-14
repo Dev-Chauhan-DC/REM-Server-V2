@@ -31,7 +31,7 @@ const auth = async (req, res) => {
                 return res.status(400).send(responses.badRequest400("Unable to create account"))
             }
 
-            const token = jwt.sign({ id: createPhone.id }, process.env.JWT_KEY, { expiresIn: "5d" })
+            const token = jwt.sign({ id: createPhone.id }, process.env.JWT_KEY, { expiresIn: "10d" })
             const data = {
                 ...createPhone,
                 token
@@ -52,7 +52,7 @@ const auth = async (req, res) => {
             return res.status(400).send(responses.badRequest400("Incorrect OTP"))
         }
 
-        const token = jwt.sign({ id: isPhonePresent.id }, process.env.JWT_KEY, { expiresIn: "5d" })
+        const token = jwt.sign({ id: isPhonePresent.id }, process.env.JWT_KEY, { expiresIn: "10d" })
 
         const data = {
             ...isPhonePresent,
