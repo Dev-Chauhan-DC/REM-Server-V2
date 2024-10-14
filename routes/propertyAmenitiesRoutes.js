@@ -8,7 +8,11 @@ const { prepath } = require('../utilities');
 
 
 const propertyAmenitiesRoutes = (app) => {
+
+
+    // Protected
     app.post(`${prepath}/list/property/amenities`,
+        middlewares.isAuthenticate,
         createPropertyAmenitiesValidator,
         validate,
         propertyAmenitiesControllers.createPropertyAmenities);
