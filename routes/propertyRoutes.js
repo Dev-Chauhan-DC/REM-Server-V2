@@ -9,7 +9,7 @@ const { prepath } = require('../utilities');
 const propertyRoutes = (app) => {
 
 
-    app.delete(`${prepath}/property/:property_id`, propertyControllers.deleteProperty);
+
 
     app.get(`${prepath}/properties/:swlat/:swlong/:nelat/:nelong`,
         propertyValidator.getPropertiesSearchResult, validate,
@@ -31,6 +31,10 @@ const propertyRoutes = (app) => {
         middlewares.isAuthenticate,
         propertyValidator.createProperty, validate,
         propertyControllers.createProperty);
+
+    app.delete(`${prepath}/property/:property_id`,
+        middlewares.isAuthenticate,
+        propertyControllers.deleteProperty);
 
 }
 
