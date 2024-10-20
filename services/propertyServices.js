@@ -417,9 +417,9 @@ const getProperty = async (propertyId, view, userId) => {
         {
             model: TenantsModel,
         },
-        {
-            model: UserModel
-        }
+        // {
+        //     model: UserModel
+        // }
 
     ]
 
