@@ -11,71 +11,71 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      properties.hasMany(models.property_amenities,{
+      properties.hasMany(models.property_amenities, {
         foreignKey: 'properties_id'
       })
 
-      properties.hasMany(models.property_photos,{
+      properties.hasMany(models.property_photos, {
         foreignKey: 'properties_id'
       })
 
-      properties.hasMany(models.interested_peoples,{
+      properties.hasMany(models.interested_peoples, {
         foreignKey: 'properties_id'
       })
 
-      properties.hasMany(models.saved_properties,{
+      properties.hasMany(models.saved_properties, {
         foreignKey: 'property_id'
       })
 
-      properties.belongsTo(models.purposes,{
+      properties.belongsTo(models.purposes, {
         foreignKey: 'purpose_id'
       })
 
-      properties.belongsTo(models.home_types,{
+      properties.belongsTo(models.home_types, {
         foreignKey: 'home_types_id'
       })
 
-      properties.belongsTo(models.facings,{
+      properties.belongsTo(models.facings, {
         foreignKey: 'facing_id'
       })
 
-      properties.belongsTo(models.flooring_types,{
+      properties.belongsTo(models.flooring_types, {
         foreignKey: 'flooring_types_id'
       })
 
-      properties.belongsTo(models.ownership_types,{
+      properties.belongsTo(models.ownership_types, {
         foreignKey: 'ownership_types_id'
       })
 
-      properties.belongsTo(models.availability_types,{
+      properties.belongsTo(models.availability_types, {
         foreignKey: 'availability_types_id'
       })
 
-      properties.belongsTo(models.furnishings,{
+      properties.belongsTo(models.furnishings, {
         foreignKey: 'furnishings_id'
       })
 
-      properties.belongsTo(models.kitchen_types,{
+      properties.belongsTo(models.kitchen_types, {
         foreignKey: 'kitchen_types_id'
       })
 
-      properties.belongsTo(models.water_supplies,{
+      properties.belongsTo(models.water_supplies, {
         foreignKey: 'water_supplies_id'
       })
 
-      properties.belongsTo(models.power_backups,{
+      properties.belongsTo(models.power_backups, {
         foreignKey: 'power_backups_id'
       })
 
-      properties.belongsTo(models.possessions,{
+      properties.belongsTo(models.possessions, {
         foreignKey: 'possessions_id'
       })
 
-      properties.belongsTo(models.tenants,{
+      properties.belongsTo(models.tenants, {
         foreignKey: 'tenants_id'
       })
 
-      properties.belongsTo(models.users,{
+      properties.belongsTo(models.users, {
         foreignKey: 'user_id'
       })
 
@@ -130,7 +130,8 @@ module.exports = (sequelize, DataTypes) => {
     possessions_id: DataTypes.INTEGER,
     flats_in_building: DataTypes.INTEGER,
     deposit: DataTypes.DOUBLE,
-    tenants_id: DataTypes.INTEGER
+    tenants_id: DataTypes.INTEGER,
+    project_type_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'properties',

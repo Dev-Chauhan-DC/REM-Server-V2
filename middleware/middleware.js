@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken")
 const UserModel = require("../models/index").users
 const responseUtilities = require("../utilities/responseUtilities");
 const responses = new responseUtilities()
+const userServices = require("../services/userServices.js")
 
 
 const isAuthenticate = async (req, res, next) => {
@@ -12,6 +13,19 @@ const isAuthenticate = async (req, res, next) => {
             throw new Error("Token not present")
         }
         const verifyToken = jwt.verify(token, process.env.JWT_KEY);
+
+        const user = await userServices.findOneUser({
+            where: {
+                id: parseInt(verifyToken.id)
+            }
+        })
+
+        if (!user) {
+            return res.status(404).send(responses.notFound404("User not found", null))
+        }
+
+        req.user = user;
+
         req.userId = verifyToken.id;
         next();
     } catch (error) {
