@@ -340,6 +340,9 @@ const getPropertiesSearchResult = async (swlat, swlong, nelat, nelong, filters, 
                 //filter for possessions_id
                 ...(filters.possessionsId ?
                     { possessions_id: { [Op.in]: filters.possessionsId } } : {}),
+                //filter for possessions_id
+                ...(filters.project_type_id ?
+                    { project_type_id: { [Op.in]: filters.project_type_id } } : {}),
                 //filter for tenants_id
                 ...(filters.tenantsId ?
                     { tenants_id: { [Op.in]: filters.tenantsId } } : {}),
@@ -547,8 +550,27 @@ const getPropertyWhere = async (where) => {
     }
 }
 
+
+const update = async (data, condition) => {
+    try {
+        const response = await PropertyModel.update(data, condition)
+        return response
+    } catch (e) {
+        throw e;
+    }
+}
+
+const findAll = async (data) => {
+    try {
+        const response = await PropertyModel.findAll(data)
+        return response
+    } catch (e) {
+        throw e;
+    }
+}
+
 module.exports = {
     createProperty, getUserProperties, deleteProperty,
     getPropertiesSearchResult, getProperty, getPropertiesById,
-    getPropertyWhere
+    getPropertyWhere, findAll, update
 }

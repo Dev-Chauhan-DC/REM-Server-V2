@@ -36,6 +36,11 @@ const propertyRoutes = (app) => {
         middlewares.isAuthenticate,
         propertyControllers.deleteProperty);
 
+
+    app.put(`${prepath}/property/:id`,
+        middlewares.isAuthenticate,
+        propertyControllers.update)
+
 }
 
 module.exports = propertyRoutes

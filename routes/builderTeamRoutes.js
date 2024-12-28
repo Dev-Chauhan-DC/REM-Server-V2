@@ -8,6 +8,7 @@ const builderTeamRoutes = (app) => {
     // app.get(`${prepath}/builder/:id`, middlewares.isAuthenticate, builderControllers.read);
     app.get(`${prepath}/builderTeams`, middlewares.isAuthenticate, builderTeamControllers.get);
     app.put(`${prepath}/builderTeams/:id`, middlewares.isAuthenticate, builderTeamControllers.update);
+    app.delete(`${prepath}/builderTeams/:id`, middlewares.isAuthenticate, builderTeamControllers.destroy);
 }
 
 

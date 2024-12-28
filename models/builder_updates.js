@@ -14,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   builder_updates.init({
-    link: DataTypes.TEXT
+    link: DataTypes.TEXT,
+    title: DataTypes.STRING,
+    builder_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'builder_updates',

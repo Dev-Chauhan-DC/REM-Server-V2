@@ -3,6 +3,8 @@ const responseUtilities = require('../utilities/responseUtilities');
 const { s3ReadUrl } = require("../utilities/s3");
 const { isNumber } = require("../utilities/validator");
 const responses = new responseUtilities()
+const { ok200, badRequest400, internalServerError500, notFound404 } = require('../utilities/responseUtility.js')
+
 
 const createProperty = async (req, res) => {
     try {
@@ -157,6 +159,7 @@ const getPropertiesSearchResult = async (req, res) => {
         const agentCertification = req.query.agentCertification ? parseInt(req.query.agentCertification) : undefined
         // const possessionsId = req.query.possessionsId ? parseInt(req.query.possessionsId) : undefined
         const possessionsId = req.query.possessionsId ? (req.query.possessionsId).split(",").map(Number) : undefined
+        const project_type_id = req.query.project_type_id ? (req.query.project_type_id).split(",").map(Number) : undefined
         const tenantsId = req.query.tenantsId ? (req.query.tenantsId).split(",").map(Number) : undefined
 
 
@@ -196,6 +199,7 @@ const getPropertiesSearchResult = async (req, res) => {
             verifiedProperty,
             agentCertification,
             possessionsId,
+            project_type_id,
             tenantsId,
             sorting
 
@@ -317,8 +321,38 @@ const getProperties = async (req, res) => {
     }
 }
 
+const update = async (req, res) => {
+    try {
+
+        const user_id = parseInt(req.user.id)
+        const id = parseInt(req.params.id)
+        const data = req.body
+
+        const userProperties = await propertyServices.findAll({ where: { user_id } })
+
+
+        if (!(userProperties.some(property => property.id === id))) {
+            return res.status(400).send(badRequest400("Property Not Found", null))
+        }
+
+        const keysToDelete = ['user_id', 'createdAt', 'updatedAt', 'id'];
+        keysToDelete.forEach(key => delete data[key]);
+
+
+        const result = await propertyServices.update(data, {
+            where: { id }
+        })
+
+        return res.status(200).send(ok200("updated successfully", result))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
+
 
 module.exports = {
     createProperty, getUserProperties, deleteProperty,
-    getPropertiesSearchResult, getProperty, getProperties
+    getPropertiesSearchResult, getProperty, getProperties,
+    update
 }

@@ -16,6 +16,7 @@ const builderRoutes = require('./builderRoutes')
 const builderTeamRoutes = require('./builderTeamRoutes')
 const BuilderAddressRoutes = require('./builderAddressRoutes')
 const BuilderCertificateRoutes = require('./builderCertificateRoutes')
+const BuilderUpdateRoutes = require('./builderUpdateRoutes')
 
 
 const index = (app) => {
@@ -39,6 +40,7 @@ const index = (app) => {
     builderTeamRoutes(app)
     BuilderAddressRoutes(app)
     BuilderCertificateRoutes(app)
+    BuilderUpdateRoutes(app)
 
 
 }
