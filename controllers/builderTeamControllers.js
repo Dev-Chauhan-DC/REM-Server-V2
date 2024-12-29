@@ -59,6 +59,35 @@ const get = async (req, res) => {
         return res.status(500).send(internalServerError500())
     }
 }
+const readAll = async (req, res) => {
+    try {
+        const builder_id = parseInt(req.params.builder_id);
+
+
+
+        const response = await builderTeamServices.findAll({ where: { builder_id } });
+
+
+
+        for (let i = 0; i < response.length; i++) {
+
+            const fileId = response[i].avatar;
+
+            if (fileId && isNumber(fileId)) {
+                const ImageUrl = await s3ReadUrl(fileId)
+                if (ImageUrl) {
+                    response[i].avatar = ImageUrl
+                }
+            }
+        }
+
+
+        return res.status(200).send(ok200("sent successfully", response))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
 const update = async (req, res) => {
     try {
 
@@ -145,4 +174,4 @@ const destroy = async (req, res) => {
 }
 
 
-module.exports = { create, get, update, destroy }
+module.exports = { create, get, update, destroy, readAll }

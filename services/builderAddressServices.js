@@ -27,4 +27,13 @@ const update = async (data, condition) => {
     }
 }
 
-module.exports = { create, findAll, update }
+const destroy = async (condition) => {
+    try {
+        const response = await BuilderAddressModel.destroy(condition);
+        return response;
+    } catch (e) {
+        throw e;
+    }
+}
+
+module.exports = { create, findAll, update, destroy }

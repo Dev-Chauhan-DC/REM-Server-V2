@@ -8,6 +8,10 @@ const BuilderUpdateRoutes = (app) => {
     // app.get(`${prepath}/builder/:id`, middlewares.isAuthenticate, builderControllers.read);
     app.get(`${prepath}/builderUpdate`, middlewares.isAuthenticate, builderUpdateControllers.get);
     app.put(`${prepath}/builderUpdate/:id`, middlewares.isAuthenticate, builderUpdateControllers.update);
+    app.delete(`${prepath}/builderUpdate/:id`, middlewares.isAuthenticate, builderUpdateControllers.destroy);
+    app.get(`${prepath}/builderUpdate/builder/:builder_id`, builderUpdateControllers.readAll);
+
+
 }
 
 

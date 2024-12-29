@@ -8,6 +8,10 @@ const BuilderCertificateRoutes = (app) => {
     // app.get(`${prepath}/builder/:id`, middlewares.isAuthenticate, builderControllers.read);
     app.get(`${prepath}/builderCertificate`, middlewares.isAuthenticate, builderCertificateControllers.get);
     app.put(`${prepath}/builderCertificate/:id`, middlewares.isAuthenticate, builderCertificateControllers.update);
+    app.delete(`${prepath}/builderCertificate/:id`, middlewares.isAuthenticate, builderCertificateControllers.destroy);
+    app.get(`${prepath}/builderCertificate/builder/:builder_id`, builderCertificateControllers.readAll);
+
+
 }
 
 

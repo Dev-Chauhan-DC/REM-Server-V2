@@ -17,10 +17,24 @@ const create = async (req, res) => {
 
 const read = async (req, res) => {
     try {
-        const { id } = req.params;
+        const id = parseInt(req.params.id);
 
 
         const response = await builderServices.findOne({ id });
+
+        if (response.background) {
+            const backgroundUrl = await s3ReadUrl(response.background)
+            if (backgroundUrl) {
+                response.background = backgroundUrl
+            }
+        }
+        if (response.avatar) {
+            const avatarUrl = await s3ReadUrl(response.avatar)
+            if (avatarUrl) {
+                response.avatar = avatarUrl
+            }
+        }
+
         return res.status(200).send(ok200("sent successfully", response))
     } catch (e) {
         console.error(e)
