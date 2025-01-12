@@ -1,5 +1,7 @@
 const { Op } = require("sequelize");
 const UserModel = require("../models/index").users
+const BuilderModel = require("../models/index").builders
+const AgentModel = require("../models/index").agent_profile
 const PropertyModel = require("../models/index").properties
 const PropertyAmenities = require("../models/index").property_amenities
 const PropertyPhotos = require("../models/index").property_photos
@@ -340,9 +342,15 @@ const getPropertiesSearchResult = async (swlat, swlong, nelat, nelong, filters, 
                 //filter for possessions_id
                 ...(filters.possessionsId ?
                     { possessions_id: { [Op.in]: filters.possessionsId } } : {}),
+                //filter for possessions_id
+                ...(filters.project_type_id ?
+                    { project_type_id: { [Op.in]: filters.project_type_id } } : {}),
                 //filter for tenants_id
                 ...(filters.tenantsId ?
                     { tenants_id: { [Op.in]: filters.tenantsId } } : {}),
+                //filter for tenants_id
+                ...(filters.builder_id ?
+                    { builder_id: { [Op.in]: filters.builder_id } } : {}),
 
 
             },
@@ -418,7 +426,12 @@ const getProperty = async (propertyId, view, userId) => {
             model: TenantsModel,
         },
         {
-            model: UserModel
+            model: AgentModel,
+            attributes: ["name", "id", "avatar"],
+        },
+        {
+            model: BuilderModel,
+            attributes: ["name", "id", "avatar"],
         }
 
     ]
@@ -547,8 +560,27 @@ const getPropertyWhere = async (where) => {
     }
 }
 
+
+const update = async (data, condition) => {
+    try {
+        const response = await PropertyModel.update(data, condition)
+        return response
+    } catch (e) {
+        throw e;
+    }
+}
+
+const findAll = async (data) => {
+    try {
+        const response = await PropertyModel.findAll(data)
+        return response
+    } catch (e) {
+        throw e;
+    }
+}
+
 module.exports = {
     createProperty, getUserProperties, deleteProperty,
     getPropertiesSearchResult, getProperty, getPropertiesById,
-    getPropertyWhere
+    getPropertyWhere, findAll, update
 }

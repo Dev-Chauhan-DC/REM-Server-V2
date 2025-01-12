@@ -12,6 +12,14 @@ const userSubscription = require('./userSubscriptionRoutes')
 const fileRoutes = require('./fileRoutes')
 const googleGeoRouter = require('./googleGeoRouter')
 const otpRoutes = require('./otpRoutes')
+const builderRoutes = require('./builderRoutes')
+const builderTeamRoutes = require('./builderTeamRoutes')
+const BuilderAddressRoutes = require('./builderAddressRoutes')
+const BuilderCertificateRoutes = require('./builderCertificateRoutes')
+const BuilderUpdateRoutes = require('./builderUpdateRoutes')
+const agentRoutes = require('./agentRoutes')
+const AgentAddressRoutes = require('./agentAddressRoutes')
+const AgentCertificateRoutes = require('./agentCertificateRoutes')
 
 
 const index = (app) => {
@@ -31,6 +39,14 @@ const index = (app) => {
     fileRoutes(app)
     googleGeoRouter(app)
     otpRoutes(app)
+    builderRoutes(app)
+    builderTeamRoutes(app)
+    BuilderAddressRoutes(app)
+    BuilderCertificateRoutes(app)
+    BuilderUpdateRoutes(app)
+    agentRoutes(app)
+    AgentAddressRoutes(app)
+    AgentCertificateRoutes(app)
 
 
 }
