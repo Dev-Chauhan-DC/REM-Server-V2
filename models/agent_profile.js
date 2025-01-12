@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      agent_profile.hasMany(models.properties, {
+        foreignKey: 'agent_id'
+      })
     }
   }
   agent_profile.init({

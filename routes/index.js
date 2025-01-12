@@ -17,6 +17,9 @@ const builderTeamRoutes = require('./builderTeamRoutes')
 const BuilderAddressRoutes = require('./builderAddressRoutes')
 const BuilderCertificateRoutes = require('./builderCertificateRoutes')
 const BuilderUpdateRoutes = require('./builderUpdateRoutes')
+const agentRoutes = require('./agentRoutes')
+const AgentAddressRoutes = require('./agentAddressRoutes')
+const AgentCertificateRoutes = require('./agentCertificateRoutes')
 
 
 const index = (app) => {
@@ -41,6 +44,9 @@ const index = (app) => {
     BuilderAddressRoutes(app)
     BuilderCertificateRoutes(app)
     BuilderUpdateRoutes(app)
+    agentRoutes(app)
+    AgentAddressRoutes(app)
+    AgentCertificateRoutes(app)
 
 
 }

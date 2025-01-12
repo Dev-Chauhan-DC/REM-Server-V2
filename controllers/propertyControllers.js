@@ -161,6 +161,7 @@ const getPropertiesSearchResult = async (req, res) => {
         const possessionsId = req.query.possessionsId ? (req.query.possessionsId).split(",").map(Number) : undefined
         const project_type_id = req.query.project_type_id ? (req.query.project_type_id).split(",").map(Number) : undefined
         const tenantsId = req.query.tenantsId ? (req.query.tenantsId).split(",").map(Number) : undefined
+        const builder_id = req.query.builder_id ? (req.query.builder_id).split(",").map(Number) : undefined
 
 
         const sorting = req.query.sorting ? req.query.sorting.split("-") : undefined
@@ -201,6 +202,7 @@ const getPropertiesSearchResult = async (req, res) => {
             possessionsId,
             project_type_id,
             tenantsId,
+            builder_id,
             sorting
 
         }
@@ -272,6 +274,18 @@ const getProperty = async (req, res) => {
 
 
         }
+
+        if (property?.builder?.avatar) {
+            const BuilderAvatarUrl = await s3ReadUrl(property.builder.avatar)
+            property.builder.avatar = BuilderAvatarUrl
+        }
+        if (property?.agent_profile?.avatar) {
+            const AgentAvatarUrl = await s3ReadUrl(property.agent_profile.avatar)
+            property.agent_profile.avatar = AgentAvatarUrl
+        }
+
+
+
 
 
 

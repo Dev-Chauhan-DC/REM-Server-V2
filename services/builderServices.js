@@ -18,6 +18,15 @@ const findOne = async (where) => {
         throw e;
     }
 }
+const findAll = async (condition) => {
+    try {
+        const response = await BuilderModel.findAll(condition)
+        const plainBuilders = response.map(builder => builder.toJSON());
+        return plainBuilders
+    } catch (e) {
+        throw e;
+    }
+}
 
 const update = async (where, data) => {
     try {
@@ -31,4 +40,4 @@ const update = async (where, data) => {
 }
 
 
-module.exports = { create, update, findOne }
+module.exports = { create, update, findOne, findAll }

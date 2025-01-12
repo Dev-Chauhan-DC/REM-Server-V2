@@ -78,6 +78,12 @@ module.exports = (sequelize, DataTypes) => {
       properties.belongsTo(models.users, {
         foreignKey: 'user_id'
       })
+      properties.belongsTo(models.builders, {
+        foreignKey: 'builder_id'
+      })
+      properties.belongsTo(models.agent_profile, {
+        foreignKey: 'agent_id'
+      })
 
 
 
@@ -131,7 +137,9 @@ module.exports = (sequelize, DataTypes) => {
     flats_in_building: DataTypes.INTEGER,
     deposit: DataTypes.DOUBLE,
     tenants_id: DataTypes.INTEGER,
-    project_type_id: DataTypes.INTEGER
+    project_type_id: DataTypes.INTEGER,
+    agent_id: DataTypes.INTEGER,
+    builder_id: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'properties',
