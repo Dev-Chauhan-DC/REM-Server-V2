@@ -2,6 +2,7 @@ const userServices = require("../services/userServices");
 const responseUtilities = require('../utilities/responseUtilities');
 const responses = new responseUtilities()
 const builderService = require('../services/builderServices.js');
+const agentService = require('../services/agentServices.js');
 
 
 const updateRole = async (req, res) => {
@@ -15,7 +16,8 @@ const updateRole = async (req, res) => {
 
         const roleIdNumber = parseInt(roleId);
         const userIdNumber = parseInt(userId);
-        if (roleId === '2') {
+
+        if (roleIdNumber === 2) {
 
             const builder = await builderService.findOne({ user_id: userIdNumber });
 
@@ -26,6 +28,20 @@ const updateRole = async (req, res) => {
 
             if (builder) {
                 return res.status(400).send(responses.badRequest400("Builder already exists", null))
+            }
+        }
+
+        if (roleIdNumber === 3) {
+
+            const agent = await agentService.findOne({ user_id: userIdNumber });
+
+
+            if (!agent) {
+                await agentService.create({ user_id: userIdNumber });
+            }
+
+            if (agent) {
+                return res.status(400).send(responses.badRequest400("Agent already exists", null))
             }
         }
 
