@@ -140,6 +140,7 @@ module.exports = (sequelize, DataTypes) => {
     project_type_id: DataTypes.INTEGER,
     agent_id: DataTypes.INTEGER,
     builder_id: DataTypes.INTEGER,
+    price_on_demand: DataTypes.TINYINT
   }, {
     sequelize,
     modelName: 'properties',

@@ -98,7 +98,7 @@ const getUserProperties = async (userId, page, ALimit) => {
             where: {
                 user_id: userId
             },
-            attributes: ["id", "price", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
+            attributes: ["id", "price", "price_on_demand", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
             include: [
                 {
                     model: PropertyPhotos
@@ -354,7 +354,7 @@ const getPropertiesSearchResult = async (swlat, swlong, nelat, nelong, filters, 
 
 
             },
-            attributes: view === "map" ? ["latitude", "longitude", "id", "price"] : ["latitude", "longitude", "id", "price", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
+            attributes: view === "map" ? ["latitude", "longitude", "id", "price", "price_on_demand"] : ["latitude", "longitude", "id", "price", "price_on_demand", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
 
         })
 
@@ -449,7 +449,7 @@ const getProperty = async (propertyId, view, userId) => {
             where: {
                 id: propertyId,
             },
-            attributes: view === "card" ? ['address', 'bedroom_count', 'bathroom_count', 'hall_count', 'kitchen_count', 'balcony_count', 'built_up_area', 'price', 'createdAt', "id"] : { exclude: [] },
+            attributes: view === "card" ? ['price_on_demand', 'address', 'bedroom_count', 'bathroom_count', 'hall_count', 'kitchen_count', 'balcony_count', 'built_up_area', 'price', 'createdAt', "id"] : { exclude: [] },
             include: view === "card"
                 ? [{
                     model: PropertyPhotos,

@@ -16,7 +16,7 @@ const removeSavedProperties = async (userId, propertyId) => {
 
         return response
     } catch (e) {
-        throw  e
+        throw e
     }
 }
 
@@ -49,7 +49,7 @@ const createSaveProperty = async (userId, propertyId) => {
 
         return saveProperty
     } catch (e) {
-        throw  e;
+        throw e;
     }
 }
 
@@ -94,7 +94,7 @@ const getSavedProperties = async (userId, sorting, page) => {
             include: [
                 {
                     model: PropertyModel,
-                    attributes: ["latitude", "longitude", "id", "price", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
+                    attributes: ["latitude", "longitude", "id", "price", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt", "price_on_demand"],
                     include: [
                         {
                             model: PropertyPhotos
@@ -104,7 +104,7 @@ const getSavedProperties = async (userId, sorting, page) => {
                 {
                     model: UserModel,
                     attributes: ["agency_name", "company_name"],
-                    include: [{model: UserRolesModel}]
+                    include: [{ model: UserRolesModel }]
                 },
             ],
             limit: limit,
@@ -120,4 +120,4 @@ const getSavedProperties = async (userId, sorting, page) => {
 }
 
 
-module.exports = {removeSavedProperties, isPropertySaved, isPropertySaved, createSaveProperty, getSavedProperties}
+module.exports = { removeSavedProperties, isPropertySaved, isPropertySaved, createSaveProperty, getSavedProperties }
