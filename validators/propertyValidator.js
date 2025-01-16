@@ -40,10 +40,10 @@ const createProperty = [
     body('balconyCount')
         .notEmpty().withMessage('Please Select Bedroom')
         .isIn([0, 1, 2, 3, 4, 5]).withMessage('Bedroom must be 0, 1, 2, 3, 4 or 5'),
-    body('builtUpArea')
-        .notEmpty().withMessage('Please Enter Built Up Area')
-        .isFloat({ gt: 0 }).withMessage('Built Up Area must be a positive number')
-        .isFloat({ lt: 5000001 }).withMessage('Built Up Area must be a less then 5000001'),
+    // body('builtUpArea')
+    //     .notEmpty().withMessage('Please Enter Built Up Area')
+    //     .isFloat({ gt: 0 }).withMessage('Built Up Area must be a positive number')
+    //     .isFloat({ lt: 5000001 }).withMessage('Built Up Area must be a less then 5000001'),
     body('carpetArea')
         .notEmpty().withMessage('Please Enter Carpet Area')
         .isFloat({ gt: 0 }).withMessage('Carpet Area must be a positive number')
@@ -82,39 +82,39 @@ const createProperty = [
 
             return true;
         }),
-    body('facingId')
-        .notEmpty().withMessage('Please Select Facing')
-        .isIn([1, 2, 3, 4, 5, 6, 7, 8]).withMessage('Invalid Facing'),
-    body('propertyAge')
-        .notEmpty().withMessage("Please Enter Property Age")
-        .isFloat({ gt: -1, lt: 101 }).withMessage("Property age must in between 1 to 100"),
-    body('totalFloor')
-        .notEmpty().withMessage('Please enter total floor')
-        .isInt({ gt: -1, lt: 201 }).withMessage("Total floor must in between 1 to 200"),
-    body('propertyFloor')
-        .custom((value, { req }) => {
-            if (parseInt(req.body.homeTypeId) == 2 || parseInt(req.body.homeTypeId) == 4) {
-                return true;
-            }
+    // body('facingId')
+    //     .notEmpty().withMessage('Please Select Facing')
+    //     .isIn([1, 2, 3, 4, 5, 6, 7, 8]).withMessage('Invalid Facing'),
+    // body('propertyAge')
+    //     .notEmpty().withMessage("Please Enter Property Age")
+    //     .isFloat({ gt: -1, lt: 101 }).withMessage("Property age must in between 1 to 100"),
+    // body('totalFloor')
+    //     .notEmpty().withMessage('Please enter total floor')
+    //     .isInt({ gt: -1, lt: 201 }).withMessage("Total floor must in between 1 to 200"),
+    // body('propertyFloor')
+    //     .custom((value, { req }) => {
+    //         if (parseInt(req.body.homeTypeId) == 2 || parseInt(req.body.homeTypeId) == 4) {
+    //             return true;
+    //         }
 
-            if (value.toString().trim().length === 0) {
-                throw new Error('Please Enter Property Floor')
-            }
+    //         if (value.toString().trim().length === 0) {
+    //             throw new Error('Please Enter Property Floor')
+    //         }
 
-            if (isNaN(parseInt(value))) {
-                throw new Error('Invalid Property Floor')
-            }
+    //         if (isNaN(parseInt(value))) {
+    //             throw new Error('Invalid Property Floor')
+    //         }
 
-            if (parseInt(value) < 0 || parseInt(value) > 200) {
-                throw new Error('Property floor must in between 1 to 200')
-            }
+    //         if (parseInt(value) < 0 || parseInt(value) > 200) {
+    //             throw new Error('Property floor must in between 1 to 200')
+    //         }
 
-            if (value > parseInt(req.body.totalFloor)) {
-                throw new Error('Property Floor must be equal or less then Total Floor')
-            }
+    //         if (value > parseInt(req.body.totalFloor)) {
+    //             throw new Error('Property Floor must be equal or less then Total Floor')
+    //         }
 
-            return true;
-        }),
+    //         return true;
+    //     }),
     body('flooringTypeId')
         .notEmpty().withMessage("Please Select Flooring Type")
         .isIn([1, 2, 3, 4, 5]).withMessage('Invalid Flooring Type'),
@@ -144,15 +144,15 @@ const createProperty = [
     body('longitude')
         .notEmpty().withMessage('Please Select Latitude')
         .isFloat().withMessage('Longitude must be float'),
-    body('price')
-        .notEmpty().withMessage('Please Enter Price')
-        .isInt({ gt: 0, lt: 10000000001 }).withMessage('Price must be greater then 0 and less then 10000000001'),
-    body('maintenance')
-        .notEmpty().withMessage('Please Enter Maintenance')
-        .isInt({ gt: -1, lt: 10000000001 }).withMessage('Maintenance must be greater then -1 and less then 10000000001'),
-    body('availabilityTypeId')
-        .notEmpty().withMessage('Please Select Availability Type')
-        .isIn([1, 2, 3, 4]).withMessage('Availability Type must be 1,2,3 or 4'),
+    // body('price')
+    //     .notEmpty().withMessage('Please Enter Price')
+    //     .isInt({ gt: 0, lt: 10000000001 }).withMessage('Price must be greater then 0 and less then 10000000001'),
+    // body('maintenance')
+    //     .notEmpty().withMessage('Please Enter Maintenance')
+    //     .isInt({ gt: -1, lt: 10000000001 }).withMessage('Maintenance must be greater then -1 and less then 10000000001'),
+    // body('availabilityTypeId')
+    //     .notEmpty().withMessage('Please Select Availability Type')
+    //     .isIn([1, 2, 3, 4]).withMessage('Availability Type must be 1,2,3 or 4'),
     body('furnishingsId')
         .notEmpty().withMessage('Please Select Furnishing')
         .isIn([1, 2, 3]).withMessage('Furnishing must be 1,2,3 or 4'),
@@ -162,41 +162,41 @@ const createProperty = [
     body('parkingSlotFourWheelerCount')
         .notEmpty().withMessage('Please select Parking slot Two Wheeler')
         .isIn([0, 1, 2, 3, 4, 5]).withMessage('Parking slot Four Wheeler must be 0,1,2,3,4 or 5'),
-    body('cupboard')
-        .notEmpty().withMessage('Please select Cupboard')
-        .isIn([0, 1, 2, 3, 4, 5]).withMessage('Cupboard must be 0,1,2,3,4 or 5'),
-    body('kitchenTypesId')
-        .notEmpty().withMessage('Please select kitchen Types')
-        .isIn([1, 2, 3]).withMessage('kitchen Types must be 0,1,2,3,4 or 5'),
+    // body('cupboard')
+    //     .notEmpty().withMessage('Please select Cupboard')
+    //     .isIn([0, 1, 2, 3, 4, 5]).withMessage('Cupboard must be 0,1,2,3,4 or 5'),
+    // body('kitchenTypesId')
+    //     .notEmpty().withMessage('Please select kitchen Types')
+    //     .isIn([1, 2, 3]).withMessage('kitchen Types must be 0,1,2,3,4 or 5'),
     body('propertyDescription')
         .notEmpty().withMessage('Please Enter Property Description')
         .isLength({ min: 10 }).withMessage("Minimum length is 10"),
     body('possessionsId')
         .notEmpty().withMessage('Please Select Possession Status')
         .isIn([1, 2]).withMessage('Possession Status Must be 1 or 2'),
-    body('flatsInBuilding')
-        .custom((value, { req }) => {
-            if (parseInt(req.body.homeTypeId) == 2 || parseInt(req.body.homeTypeId) == 4) {
-                return true;
-            }
+    // body('flatsInBuilding')
+    //     .custom((value, { req }) => {
+    //         if (parseInt(req.body.homeTypeId) == 2 || parseInt(req.body.homeTypeId) == 4) {
+    //             return true;
+    //         }
 
-            if (value.toString().trim().length == 0) {
-                throw new Error('Please Enter Flats in Building')
-            }
+    //         if (value.toString().trim().length == 0) {
+    //             throw new Error('Please Enter Flats in Building')
+    //         }
 
-            if (isNaN(parseInt(value))) {
-                throw new Error('Invalid Flats in Building')
-            }
+    //         if (isNaN(parseInt(value))) {
+    //             throw new Error('Invalid Flats in Building')
+    //         }
 
-            if (parseInt(value) < 1 || parseInt(value) > 900) {
-                throw new Error('Flats in Building Must be in between 1 and 900')
-            }
+    //         if (parseInt(value) < 1 || parseInt(value) > 900) {
+    //             throw new Error('Flats in Building Must be in between 1 and 900')
+    //         }
 
-            return true;
-        }),
-    body('deposit')
-        .notEmpty().withMessage('Please Enter deposit')
-        .isInt({ gt: 0, lt: 10000000001 }).withMessage('Deposit must be greater then 0 and less then 10000000001'),
+    //         return true;
+    //     }),
+    // body('deposit')
+    //     .notEmpty().withMessage('Please Enter deposit')
+    //     .isInt({ gt: 0, lt: 10000000001 }).withMessage('Deposit must be greater then 0 and less then 10000000001'),
     body('tenantsId')
         .custom((value, { req }) => {
             if (parseInt(req.body.purposeId) == 1) {
