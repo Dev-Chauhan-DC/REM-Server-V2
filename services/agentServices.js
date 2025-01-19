@@ -40,5 +40,14 @@ const findAll = async (condition) => {
     }
 }
 
+const destroy = async (condition) => {
+    try {
+        const response = await AgentModel.destroy(condition);
+        return response;
+    } catch (e) {
+        throw e;
+    }
+}
 
-module.exports = { findAll, create, update, findOne }
+
+module.exports = { destroy, findAll, create, update, findOne }

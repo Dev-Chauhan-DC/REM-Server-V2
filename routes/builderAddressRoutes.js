@@ -12,6 +12,10 @@ const BuilderAddressRoutes = (app) => {
     app.get(`${prepath}/builderAddress/builder/:builder_id`, builderAddressControllers.readAll);
 
 
+    // admin
+    app.post(`${prepath}/admin/builderAddress`, middlewares.isAuthenticate, builderAddressControllers.adminCreate);
+    app.put(`${prepath}/admin/builderAddress/:id`, middlewares.isAuthenticate, builderAddressControllers.adminUpdate);
+    app.delete(`${prepath}/admin/builderAddress/:id`, middlewares.isAuthenticate, builderAddressControllers.adminDestroy);
 }
 
 

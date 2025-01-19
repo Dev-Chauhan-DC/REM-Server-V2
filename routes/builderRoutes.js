@@ -10,6 +10,14 @@ const builderRoutes = (app) => {
     app.get(`${prepath}/builder`, middlewares.isAuthenticate, builderControllers.readCurrent);
     app.put(`${prepath}/builder`, middlewares.isAuthenticate, builderControllers.update);
 
+
+
+
+
+    // admin
+    app.put(`${prepath}/builder/:id`, middlewares.isAuthenticate, builderControllers.updateByID);
+    app.delete(`${prepath}/admin/builder/:id`, middlewares.isAuthenticate, builderControllers.adminDestroy);
+
 }
 
 

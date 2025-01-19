@@ -12,6 +12,11 @@ const BuilderCertificateRoutes = (app) => {
     app.get(`${prepath}/builderCertificate/builder/:builder_id`, builderCertificateControllers.readAll);
 
 
+    // admin
+    app.post(`${prepath}/admin/builderCertificate`, middlewares.isAuthenticate, builderCertificateControllers.adminCreate);
+    app.put(`${prepath}/admin/builderCertificate/:id`, middlewares.isAuthenticate, builderCertificateControllers.adminUpdate);
+    app.delete(`${prepath}/admin/builderCertificate/:id`, middlewares.isAuthenticate, builderCertificateControllers.adminDestroy);
+
 }
 
 

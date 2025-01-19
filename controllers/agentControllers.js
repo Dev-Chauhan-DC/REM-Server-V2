@@ -1,4 +1,5 @@
 const agentServices = require('../services/agentServices.js');
+const { isAdmin } = require('../utilities/admin/user.js');
 const { ok200, badRequest400, internalServerError500, notFound404 } = require('../utilities/responseUtility.js')
 const { s3ReadUrl } = require('../utilities/s3.js')
 const { Op } = require('sequelize');
@@ -6,21 +7,29 @@ const { Op } = require('sequelize');
 
 const create = async (req, res) => {
     try {
-        const user_roles_id = parseInt(req.user.user_roles_id);
-        const id = parseInt(req.user.id);
+        // const user_roles_id = parseInt(req.user.user_roles_id);
+        // const id = parseInt(req.user.id);
 
-        if (user_roles_id !== 3) {
-            return res.status(400).send(badRequest400("You are not allowed to create an agent profile"))
-        }
+        // if (user_roles_id !== 3) {
+        //     return res.status(400).send(badRequest400("You are not allowed to create an agent profile"))
+        // }
 
-        const isUserId = await agentServices.findOne({ user_id: id });
+        // const isUserId = await agentServices.findOne({ user_id: id });
 
-        if (isUserId) {
-            return res.status(400).send(badRequest400("You already have an agent profile"))
+        // if (isUserId) {
+        //     return res.status(400).send(badRequest400("You already have an agent profile"))
+        // }
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
         }
 
         const data = req.body;
-        data.user_id = req.user.id;
+        // data.user_id = req.user.id;
+
+
+
+
+
 
         const response = await agentServices.create(data);
         return res.status(200).send(ok200("created successfully", response))
@@ -141,5 +150,48 @@ const update = async (req, res) => {
     }
 }
 
+const updateByID = async (req, res) => {
+    try {
 
-module.exports = { readAll, update, create, read, readCurrent }
+
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
+        }
+
+
+
+        const id = parseInt(req.params.id);
+        const data = req.body;
+
+
+        const response = await agentServices.update({ id }, data);
+        return res.status(200).send(ok200("updated successfully", response))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
+
+const adminDestroy = async (req, res) => {
+    try {
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
+        }
+
+        const id = parseInt(req.params.id);
+
+
+        const response = await agentServices.destroy({
+            where: {
+                id
+            }
+        });
+        return res.status(200).send(ok200("deleted successfully", response))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
+
+
+module.exports = { adminDestroy, readAll, update, create, read, readCurrent, updateByID }

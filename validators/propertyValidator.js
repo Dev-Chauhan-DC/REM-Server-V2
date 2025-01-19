@@ -27,61 +27,62 @@ const createProperty = [
         .withMessage('Address must be longer than 10 characters'),
     body('bedroomCount')
         .notEmpty().withMessage('Please Select Bedroom')
-        .isIn([0, 1, 2, 3, 4, 5]).withMessage('Bedroom must be 0, 1, 2, 3, 4 or 5'),
+        .isIn([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).withMessage('Bedroom must be 0, 1, 2, 3, 4 or 5'),
     body('bathroomCount')
-        .notEmpty().withMessage('Please Select Bedroom')
-        .isIn([0, 1, 2, 3, 4, 5]).withMessage('Bedroom must be 0, 1, 2, 3, 4 or 5'),
+        .notEmpty().withMessage('Please Select Bathroom')
+        .isIn([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).withMessage('Bathroom must be 0, 1, 2, 3, 4 or 5'),
     body('hallCount')
-        .notEmpty().withMessage('Please Select Bedroom')
-        .isIn([0, 1, 2, 3, 4, 5]).withMessage('Bedroom must be 0, 1, 2, 3, 4 or 5'),
+        .notEmpty().withMessage('Please Select Hall')
+        .isIn([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).withMessage('Hall must be 0, 1, 2, 3, 4 or 5'),
     body('kitchenCount')
-        .notEmpty().withMessage('Please Select Bedroom')
-        .isIn([0, 1, 2, 3, 4, 5]).withMessage('Bedroom must be 0, 1, 2, 3, 4 or 5'),
+        .notEmpty().withMessage('Please Select Kitchen')
+        .isIn([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).withMessage('Kitchen must be 0, 1, 2, 3, 4 or 5'),
     body('balconyCount')
-        .notEmpty().withMessage('Please Select Bedroom')
-        .isIn([0, 1, 2, 3, 4, 5]).withMessage('Bedroom must be 0, 1, 2, 3, 4 or 5'),
+        .notEmpty().withMessage('Please Select Balcony')
+        .isIn([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).withMessage('Balcony must be 0, 1, 2, 3, 4 or 5'),
     // body('builtUpArea')
     //     .notEmpty().withMessage('Please Enter Built Up Area')
     //     .isFloat({ gt: 0 }).withMessage('Built Up Area must be a positive number')
     //     .isFloat({ lt: 5000001 }).withMessage('Built Up Area must be a less then 5000001'),
-    body('carpetArea')
-        .notEmpty().withMessage('Please Enter Carpet Area')
-        .isFloat({ gt: 0 }).withMessage('Carpet Area must be a positive number')
-        .isFloat({ lt: 5000001 }).withMessage('Carpet Area must be a less then 5000001')
-        .custom((value, { req }) => {
-            if (parseFloat(value) > parseFloat(req.body.builtUpArea)) {
-                throw new Error('Carpet Area must be equal to or greater than Built Up Area');
-            }
-            return true;
-        }),
-    body('plotArea')
-        .custom((value, { req }) => {
-            if (parseInt(req.body.homeTypeId) == 1 || parseInt(req.body.homeTypeId) == 3) {
-                return true;
-            }
+    // body('carpetArea')
+    //     .notEmpty().withMessage('Please Enter Carpet Area')
+    //     .isFloat({ gt: 0 }).withMessage('Carpet Area must be a positive number')
+    //     .isFloat({ lt: 5000001 }).withMessage('Carpet Area must be a less then 5000001')
+    // .custom((value, { req }) => {
+    //     if (parseFloat(value) > parseFloat(req.body.builtUpArea)) {
+    //         throw new Error('Carpet Area must be equal to or greater than Built Up Area');
+    //     }
+    //     return true;
+    // })
+    // ,
+    // body('plotArea')
+    //     .custom((value, { req }) => {
+    //         if (parseInt(req.body.homeTypeId) == 1 || parseInt(req.body.homeTypeId) == 3) {
+    //             return true;
+    //         }
 
-            if (value.toString().trim().length === 0) {
-                throw new Error('Please Enter Plot Area')
-            }
+    //         if (value.toString().trim().length === 0) {
+    //             throw new Error('Please Enter Plot Area')
+    //         }
 
-            if (isNaN(parseFloat(value))) {
-                throw new Error('Invalid Plot Area')
-            }
+    //         if (isNaN(parseFloat(value))) {
+    //             throw new Error('Invalid Plot Area')
+    //         }
 
-            if (parseFloat(value) <= 0) {
-                throw new Error('Plot Area must be a positive number')
-            }
+    //         if (parseFloat(value) <= 0) {
+    //             throw new Error('Plot Area must be a positive number')
+    //         }
 
-            if (parseFloat(value) > 5000000) {
-                throw new Error('Plot Area must be must be a less then 5000001')
-            }
+    //         if (parseFloat(value) > 5000000) {
+    //             throw new Error('Plot Area must be must be a less then 5000001')
+    //         }
 
-            if (parseFloat(value) < parseFloat(req.body.builtUpArea)) {
-                throw new Error('Plot Area must be equal to or greater than Built Up Area')
-            }
+    //         if (parseFloat(value) < parseFloat(req.body.builtUpArea)) {
+    //             throw new Error('Plot Area must be equal to or greater than Built Up Area')
+    //         }
 
-            return true;
-        }),
+    //         return true;
+    //     }),
     // body('facingId')
     //     .notEmpty().withMessage('Please Select Facing')
     //     .isIn([1, 2, 3, 4, 5, 6, 7, 8]).withMessage('Invalid Facing'),
@@ -158,10 +159,10 @@ const createProperty = [
         .isIn([1, 2, 3]).withMessage('Furnishing must be 1,2,3 or 4'),
     body('parkingSlotTwoWheelerCount')
         .notEmpty().withMessage('Please select Parking slot Two Wheeler')
-        .isIn([0, 1, 2, 3, 4, 5]).withMessage('Parking slot Two Wheeler must be 0,1,2,3,4 or 5'),
+        .isIn([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).withMessage('Parking slot Two Wheeler must be 0,1,2,3,4 or 5'),
     body('parkingSlotFourWheelerCount')
         .notEmpty().withMessage('Please select Parking slot Two Wheeler')
-        .isIn([0, 1, 2, 3, 4, 5]).withMessage('Parking slot Four Wheeler must be 0,1,2,3,4 or 5'),
+        .isIn([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).withMessage('Parking slot Four Wheeler must be 0,1,2,3,4 or 5'),
     // body('cupboard')
     //     .notEmpty().withMessage('Please select Cupboard')
     //     .isIn([0, 1, 2, 3, 4, 5]).withMessage('Cupboard must be 0,1,2,3,4 or 5'),
