@@ -9,6 +9,13 @@ const builderTeamRoutes = (app) => {
     app.get(`${prepath}/builderTeams`, middlewares.isAuthenticate, builderTeamControllers.get);
     app.put(`${prepath}/builderTeams/:id`, middlewares.isAuthenticate, builderTeamControllers.update);
     app.delete(`${prepath}/builderTeams/:id`, middlewares.isAuthenticate, builderTeamControllers.destroy);
+
+
+    // admin
+    app.post(`${prepath}/admin/builderTeams`, middlewares.isAuthenticate, builderTeamControllers.adminCreate);
+    app.put(`${prepath}/admin/builderTeams/:id`, middlewares.isAuthenticate, builderTeamControllers.adminUpdate);
+    app.delete(`${prepath}/admin/builderTeams/:id`, middlewares.isAuthenticate, builderTeamControllers.adminDestroy);
+
 }
 
 

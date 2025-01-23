@@ -1,5 +1,6 @@
 const builderAddressServices = require('../services/builderAddressServices.js');
 const builderServices = require('../services/builderServices.js');
+const { isAdmin } = require('../utilities/admin/user.js');
 const { ok200, badRequest400, internalServerError500, notFound404 } = require('../utilities/responseUtility')
 
 
@@ -26,6 +27,20 @@ const create = async (req, res) => {
     }
 }
 
+const adminCreate = async (req, res) => {
+    try {
+
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
+        }
+        const data = req.body;
+        const response = await builderAddressServices.create(data);
+        return res.status(200).send(ok200("created successfully", response))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
 
 const get = async (req, res) => {
     try {
@@ -89,6 +104,32 @@ const update = async (req, res) => {
     }
 }
 
+const adminUpdate = async (req, res) => {
+    try {
+
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
+        }
+
+        const data = req.body
+        const id = req.params.id
+
+
+        const result = await builderAddressServices.update(data, {
+            where: {
+                id: parseInt(id)
+            }
+        },);
+
+
+
+        return res.status(200).send(ok200("updated successfully", result))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
+
 const destroy = async (req, res) => {
     try {
 
@@ -115,6 +156,31 @@ const destroy = async (req, res) => {
         if (!isMatched) {
             return res.status(400).send(badRequest400("not found", null))
         }
+
+
+        const result = await builderAddressServices.destroy({
+            where: {
+                id: parseInt(id)
+            }
+        },);
+
+
+
+        return res.status(200).send(ok200("deleted successfully", result))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
+
+
+const adminDestroy = async (req, res) => {
+    try {
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
+        }
+
+        const id = req.params.id
 
 
         const result = await builderAddressServices.destroy({
@@ -162,4 +228,4 @@ const readAll = async (req, res) => {
     }
 }
 
-module.exports = { create, get, update, destroy, readAll }
+module.exports = { adminDestroy, adminUpdate, adminCreate, create, get, update, destroy, readAll }

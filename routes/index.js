@@ -20,6 +20,7 @@ const BuilderUpdateRoutes = require('./builderUpdateRoutes')
 const agentRoutes = require('./agentRoutes')
 const AgentAddressRoutes = require('./agentAddressRoutes')
 const AgentCertificateRoutes = require('./agentCertificateRoutes')
+const PhotoCategoryRoutes = require('./photoCategoryRoutes')
 
 
 const index = (app) => {
@@ -47,7 +48,7 @@ const index = (app) => {
     agentRoutes(app)
     AgentAddressRoutes(app)
     AgentCertificateRoutes(app)
-
+    PhotoCategoryRoutes(app)
 
 }
 

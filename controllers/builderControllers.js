@@ -2,10 +2,18 @@ const builderServices = require('../services/builderServices.js');
 const { ok200, badRequest400, internalServerError500, notFound404 } = require('../utilities/responseUtility')
 const { s3ReadUrl } = require('../utilities/s3.js')
 const { Op } = require('sequelize');
+const { parsePhoneNumberFromString } = require('libphonenumber-js');
+const { isAdmin } = require('../utilities/admin/user.js');
+
 
 
 const create = async (req, res) => {
     try {
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
+        }
+
+
         const data = req.body;
 
 
@@ -127,5 +135,45 @@ const update = async (req, res) => {
     }
 }
 
+const updateByID = async (req, res) => {
+    try {
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
+        }
 
-module.exports = { update, create, read, readCurrent, readAll }
+
+
+        const id = parseInt(req.params.id);
+        const data = req.body;
+
+
+        const response = await builderServices.update({ id }, data);
+        return res.status(200).send(ok200("updated successfully", response))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
+const adminDestroy = async (req, res) => {
+    try {
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
+        }
+
+        const id = parseInt(req.params.id);
+
+
+        const response = await builderServices.destroy({
+            where: {
+                id
+            }
+        });
+        return res.status(200).send(ok200("deleted successfully", response))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
+
+
+module.exports = { adminDestroy, update, create, read, readCurrent, readAll, updateByID }

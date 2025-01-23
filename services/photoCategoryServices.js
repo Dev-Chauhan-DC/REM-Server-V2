@@ -1,9 +1,9 @@
-const AgentModel = require("../models/index").agent_profile;
+const PhotoCategoryModel = require("../models/index").property_photo_categories;
 
 
 const create = async (data) => {
     try {
-        const response = await AgentModel.create(data)
+        const response = await PhotoCategoryModel.create(data)
         return response
     } catch (e) {
         throw e;
@@ -12,18 +12,16 @@ const create = async (data) => {
 
 const findOne = async (where) => {
     try {
-        const response = await AgentModel.findOne({ where })
+        const response = await PhotoCategoryModel.findOne({ where })
         return response
     } catch (e) {
         throw e;
     }
 }
 
-const update = async (where, data) => {
+const update = async (data, condition) => {
     try {
-        const response = await AgentModel.update(data, {
-            where: where,
-        })
+        const response = await PhotoCategoryModel.update(data, condition)
         return response
     } catch (e) {
         throw e;
@@ -32,7 +30,7 @@ const update = async (where, data) => {
 
 const findAll = async (condition) => {
     try {
-        const response = await AgentModel.findAll(condition)
+        const response = await PhotoCategoryModel.findAll(condition)
         const plainBuilders = response.map(builder => builder.toJSON());
         return plainBuilders
     } catch (e) {
@@ -42,7 +40,7 @@ const findAll = async (condition) => {
 
 const destroy = async (condition) => {
     try {
-        const response = await AgentModel.destroy(condition);
+        const response = await PhotoCategoryModel.destroy(condition);
         return response;
     } catch (e) {
         throw e;

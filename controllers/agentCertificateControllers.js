@@ -1,5 +1,6 @@
 const agentCertificatesServices = require('../services/agentCertificateServices.js');
 const agentServices = require('../services/agentServices.js');
+const { isAdmin } = require('../utilities/admin/user.js');
 const { ok200, badRequest400, internalServerError500, notFound404 } = require('../utilities/responseUtility.js')
 const { s3ReadUrl } = require('../utilities/s3.js')
 const { isNumber } = require("../utilities/validator.js");
@@ -28,6 +29,20 @@ const create = async (req, res) => {
     }
 }
 
+const adminCreate = async (req, res) => {
+    try {
+
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
+        }
+        const data = req.body;
+        const response = await agentCertificatesServices.create(data);
+        return res.status(200).send(ok200("created successfully", response))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
 
 const get = async (req, res) => {
     try {
@@ -133,6 +148,32 @@ const update = async (req, res) => {
     }
 }
 
+const adminUpdate = async (req, res) => {
+    try {
+
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
+        }
+
+        const data = req.body
+        const id = req.params.id
+
+
+        const result = await agentCertificatesServices.update(data, {
+            where: {
+                id: parseInt(id)
+            }
+        },);
+
+
+
+        return res.status(200).send(ok200("updated successfully", result))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
+
 const destroy = async (req, res) => {
     try {
 
@@ -176,4 +217,28 @@ const destroy = async (req, res) => {
     }
 }
 
-module.exports = { create, get, update, destroy, readAll }
+const adminDestroy = async (req, res) => {
+    try {
+        if (!isAdmin(req.user.phone_number)) {
+            return res.status(404).send(badRequest400('You are not authorized'))
+        }
+
+        const id = req.params.id
+
+
+        const result = await agentCertificatesServices.destroy({
+            where: {
+                id: parseInt(id)
+            }
+        },);
+
+
+
+        return res.status(200).send(ok200("deleted successfully", result))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
+
+module.exports = { adminDestroy, adminUpdate, adminCreate, create, get, update, destroy, readAll }

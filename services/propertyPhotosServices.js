@@ -16,16 +16,25 @@ const createPropertyImages = async (data) => {
 
 
 const createPropertyFile = async (propertyId, fileId) => {
-    try{
+    try {
         const response = await PropertyPhotos.create({
             properties_id: propertyId,
             file_id: fileId
         })
 
         return response;
-    }catch (e) {
+    } catch (e) {
         throw e;
     }
 }
 
-module.exports = {createPropertyImages, createPropertyFile}
+const create = async (data) => {
+    try {
+        const response = await PropertyPhotos.create(data)
+        return response
+    } catch (e) {
+        throw e;
+    }
+}
+
+module.exports = { create, createPropertyImages, createPropertyFile }

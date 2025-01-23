@@ -16,6 +16,10 @@ const propertyPhotosRoutes = (app) => {
         createPropertyImageFilesValidator,
         validate,
         propertyPhotosControllers.createPropertyImageFiles);
+
+    app.post(`${prepath}/propertyPhoto/bulk`,
+        middlewares.isAuthenticate,
+        propertyPhotosControllers.createBulk);
 }
 
 module.exports = propertyPhotosRoutes

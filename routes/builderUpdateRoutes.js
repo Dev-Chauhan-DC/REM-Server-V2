@@ -11,6 +11,11 @@ const BuilderUpdateRoutes = (app) => {
     app.delete(`${prepath}/builderUpdate/:id`, middlewares.isAuthenticate, builderUpdateControllers.destroy);
     app.get(`${prepath}/builderUpdate/builder/:builder_id`, builderUpdateControllers.readAll);
 
+    // admin
+    app.post(`${prepath}/admin/builderUpdate`, middlewares.isAuthenticate, builderUpdateControllers.adminCreate);
+    app.put(`${prepath}/admin/builderUpdate/:id`, middlewares.isAuthenticate, builderUpdateControllers.adminUpdate);
+    app.delete(`${prepath}/admin/builderUpdate/:id`, middlewares.isAuthenticate, builderUpdateControllers.adminDestroy);
+
 
 }
 
