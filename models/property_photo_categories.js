@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      property_photo_categories.hasMany(models.property_photos, {
+        foreignKey: 'category_id'
+      })
     }
   }
   property_photo_categories.init({

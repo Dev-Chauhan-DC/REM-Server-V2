@@ -24,6 +24,8 @@ const UserRolesModel = require("../models/index").user_roles
 const UserSubscriptionPlan = require("../models/index").subscription_plans
 const CouponeModel = require("../models/index").coupons
 const UserSubscriptionModel = require("../models/index").user_subscriptions
+const PhotoCategoryModel = require("../models/index").property_photo_categories;
+
 
 const createProperty = async (data) => {
 
@@ -175,7 +177,15 @@ const getPropertiesSearchResult = async (swlat, swlong, nelat, nelong, filters, 
 
         const includesArray = [
             {
-                model: PropertyPhotos
+                model: PropertyPhotos,
+                include: [
+                    {
+                        model: PhotoCategoryModel,
+                        attributes: ["name", "id"]
+
+                    }
+
+                ]
             },
             {
                 model: UserModel,
@@ -377,7 +387,15 @@ const getProperty = async (propertyId, view, userId) => {
             ]
         },
         {
-            model: PropertyPhotos
+            model: PropertyPhotos,
+            include: [
+                {
+                    model: PhotoCategoryModel,
+                    attributes: ["name", "id"]
+
+                }
+
+            ]
         },
         {
             model: InterestedPeoplesModel,
@@ -453,6 +471,14 @@ const getProperty = async (propertyId, view, userId) => {
             include: view === "card"
                 ? [{
                     model: PropertyPhotos,
+                    include: [
+                        {
+                            model: PhotoCategoryModel,
+                            attributes: ["name", "id"]
+
+                        }
+
+                    ],
                     attributes: { exclude: ['createdAt', 'updatedAt'] }
 
                 }, {
@@ -579,8 +605,17 @@ const findAll = async (data) => {
     }
 }
 
+const findOne = async (condition) => {
+    try {
+        const response = await PropertyModel.findOne(condition)
+        return response
+    } catch (e) {
+        throw e;
+    }
+}
+
 module.exports = {
     createProperty, getUserProperties, deleteProperty,
     getPropertiesSearchResult, getProperty, getPropertiesById,
-    getPropertyWhere, findAll, update
+    getPropertyWhere, findAll, update, findOne
 }
