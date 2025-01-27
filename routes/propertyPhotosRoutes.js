@@ -21,6 +21,8 @@ const propertyPhotosRoutes = (app) => {
         propertyPhotosControllers.createBulk);
 
     app.delete(`${prepath}/propertyPhoto/:id`, middlewares.isAuthenticate, propertyPhotosControllers.destroy);
+    app.put(`${prepath}/propertyPhoto/:id`, middlewares.isAuthenticate, propertyPhotosControllers.update);
+    app.post(`${prepath}/propertyPhoto`, middlewares.isAuthenticate, propertyPhotosControllers.create);
 
 }
 
