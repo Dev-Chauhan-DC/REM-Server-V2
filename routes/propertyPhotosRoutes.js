@@ -9,7 +9,6 @@ const propertyPhotosRoutes = (app) => {
     // app.post("/list/property/images", propertyPhotosControllers.createPropertyImages);
 
 
-
     // Protected
     app.post(`${prepath}/list/property/images/file/id`,
         middlewares.isAuthenticate,
@@ -20,6 +19,11 @@ const propertyPhotosRoutes = (app) => {
     app.post(`${prepath}/propertyPhoto/bulk`,
         middlewares.isAuthenticate,
         propertyPhotosControllers.createBulk);
+
+    app.delete(`${prepath}/propertyPhoto/:id`, middlewares.isAuthenticate, propertyPhotosControllers.destroy);
+    app.put(`${prepath}/propertyPhoto/:id`, middlewares.isAuthenticate, propertyPhotosControllers.update);
+    app.post(`${prepath}/propertyPhoto`, middlewares.isAuthenticate, propertyPhotosControllers.create);
+
 }
 
 module.exports = propertyPhotosRoutes

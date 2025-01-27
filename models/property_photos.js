@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       property_photos.belongsTo(models.properties, {
         foreignKey: 'properties_id'
       })
+
+      property_photos.belongsTo(models.property_photo_categories, {
+        foreignKey: 'category_id'
+      })
     }
   }
   property_photos.init({
