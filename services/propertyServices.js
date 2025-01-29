@@ -103,7 +103,15 @@ const getUserProperties = async (userId, page, ALimit) => {
             attributes: ["id", "price", "price_on_demand", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
             include: [
                 {
-                    model: PropertyPhotos
+                    model: PropertyPhotos,
+                    include: [
+                        {
+                            model: PhotoCategoryModel,
+                            attributes: ["name", "id"]
+
+                        }
+
+                    ]
                 },
                 {
                     model: UserModel,
@@ -517,7 +525,15 @@ const getPropertiesById = async (ids) => {
                     ]
                 },
                 {
-                    model: PropertyPhotos
+                    model: PropertyPhotos,
+                    include: [
+                        {
+                            model: PhotoCategoryModel,
+                            attributes: ["name", "id"]
+
+                        }
+
+                    ]
                 },
                 {
                     model: InterestedPeoplesModel,
