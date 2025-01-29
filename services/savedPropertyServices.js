@@ -3,6 +3,8 @@ const PropertyModel = require("../models/index").properties
 const PropertyPhotos = require("../models/index").property_photos
 const SavePropertyModel = require("../models/index").saved_properties
 const UserRolesModel = require("../models/index").user_roles
+const PhotoCategoryModel = require("../models/index").property_photo_categories;
+
 
 
 const removeSavedProperties = async (userId, propertyId) => {
@@ -97,7 +99,15 @@ const getSavedProperties = async (userId, sorting, page) => {
                     attributes: ["latitude", "longitude", "id", "price", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt", "price_on_demand"],
                     include: [
                         {
-                            model: PropertyPhotos
+                            model: PropertyPhotos,
+                            include: [
+                                {
+                                    model: PhotoCategoryModel,
+                                    attributes: ["name", "id"]
+
+                                }
+
+                            ]
                         },
                     ]
                 },

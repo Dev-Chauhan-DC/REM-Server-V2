@@ -80,8 +80,17 @@ const findOneUser = async (data) => {
     }
 }
 
+const update = async (data, condition) => {
+    try {
+        const response = await UserModel.update(data, condition)
+        return response
+    } catch (e) {
+        throw e;
+    }
+}
 
 
 
 
-module.exports = { updateRole, getUser, updateProfileInfo, findOneUser }
+
+module.exports = { update, updateRole, getUser, updateProfileInfo, findOneUser }
