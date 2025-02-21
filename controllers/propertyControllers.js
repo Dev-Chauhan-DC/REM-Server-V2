@@ -128,7 +128,13 @@ const getPropertiesSearchResult = async (req, res) => {
     try {
         const userId = parseInt(req.userId)
         const purposeId = req.query.purposeId ? parseInt(req.query.purposeId) : undefined
-        const homeTypeId = req.query.homeTypeId ? (req.query.homeTypeId).split(",").map(Number) : undefined
+        // const homeTypeId = req.query.homeTypeId ? (req.query.homeTypeId).split(",").map(i => i && parseInt(i)) : undefined
+        const homeTypeId = req.query.homeTypeId
+            ? (req.query.homeTypeId)
+                .split(",")
+                .filter(i => /^\d+$/.test(i)) // Keep only pure numeric values
+                .map(Number) // Convert to integers
+            : undefined;
         const userRoleId = req.query.userRoleId ? (req.query.userRoleId).split(",").map(Number) : undefined
         const priceRange = req.query.priceRange ? (req.query.priceRange).split("-").map(Number) : undefined
 
@@ -206,6 +212,8 @@ const getPropertiesSearchResult = async (req, res) => {
             sorting
 
         }
+
+        console.log(filters.homeTypeId)
 
         const swlat = parseFloat(req.params.swlat)
         const swlong = parseFloat(req.params.swlong)

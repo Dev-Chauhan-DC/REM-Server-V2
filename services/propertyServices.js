@@ -284,7 +284,7 @@ const getPropertiesSearchResult = async (swlat, swlong, nelat, nelong, filters, 
                     [Op.between]: [swlong, nelong],
                 },
                 //filter for home_types_id
-                ...(filters.homeTypeId ?
+                ...(filters.homeTypeId && filters.homeTypeId.length !== 0 ?
                     {
                         home_types_id: {
                             [Op.in]: filters.homeTypeId
