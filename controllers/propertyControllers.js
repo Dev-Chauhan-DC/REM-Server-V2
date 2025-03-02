@@ -213,7 +213,6 @@ const getPropertiesSearchResult = async (req, res) => {
 
         }
 
-        console.log(filters.homeTypeId)
 
         const swlat = parseFloat(req.params.swlat)
         const swlong = parseFloat(req.params.swlong)

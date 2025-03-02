@@ -21,6 +21,9 @@ const agentRoutes = require('./agentRoutes')
 const AgentAddressRoutes = require('./agentAddressRoutes')
 const AgentCertificateRoutes = require('./agentCertificateRoutes')
 const PhotoCategoryRoutes = require('./photoCategoryRoutes')
+const AreaRoutes = require('./areaRoutes')
+const DistrictRoutes = require('./districtRoutes')
+const StateRoutes = require('./stateRoutes')
 
 
 const index = (app) => {
@@ -49,6 +52,9 @@ const index = (app) => {
     AgentAddressRoutes(app)
     AgentCertificateRoutes(app)
     PhotoCategoryRoutes(app)
+    AreaRoutes(app)
+    DistrictRoutes(app)
+    StateRoutes(app)
 
 }
 
