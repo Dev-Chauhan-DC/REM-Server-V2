@@ -1,8 +1,9 @@
 const savePeropertyServices = require("../services/savedPropertyServices");
 const responseUtilities = require("../utilities/responseUtilities");
-const {isNumber} = require("../utilities/validator");
-const {s3ReadUrl} = require("../utilities/s3");
+const { isNumber } = require("../utilities/validator");
+const { s3ReadUrl } = require("../utilities/s3");
 const responses = new responseUtilities();
+const { ok200 } = require('../utilities/responseUtility.js')
 
 const createSaveProperty = async (req, res) => {
     try {
@@ -60,5 +61,37 @@ const getSavedProperties = async (req, res) => {
     }
 }
 
+const getSavedPropertiesV2 = async (req, res) => {
+    try {
+        const sorting = req.query.sorting ? req.query.sorting.split("-") : undefined
 
-module.exports = {createSaveProperty, getSavedProperties}
+        //pagination page
+        const page = req.query.page && isNumber(req.query.page) ? parseInt(req.query.page) : 1;
+        const limit = req.query.limit && isNumber(req.query.limit) ? parseInt(req.query.limit) : 3;
+
+        const userId = parseInt(req.userId)
+
+        const response = await savePeropertyServices.getSavedPropertiesV2(userId, sorting, page, limit)
+
+
+        for (let i = 0; i < response.data.length; i++) {
+            for (let j = 0; j < response?.data?.[i]?.property?.property_photos?.length; j++) {
+                const fileId = response.data[i].property.property_photos[j].file_id;
+                if (fileId && isNumber(fileId)) {
+                    const propertyImageUrl = await s3ReadUrl(fileId)
+                    if (propertyImageUrl) {
+                        response.data[i].property.property_photos[j].photos = propertyImageUrl
+                    }
+                }
+            }
+        }
+
+        return res.status(200).send(ok200("sent successfully", response.data, response.meta))
+    } catch (error) {
+        console.error(error)
+        return res.status(500).send(responses.internalServerError500())
+    }
+}
+
+
+module.exports = { getSavedPropertiesV2, createSaveProperty, getSavedProperties }

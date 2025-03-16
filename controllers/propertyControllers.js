@@ -99,6 +99,37 @@ const getUserProperties = async (req, res) => {
         return res.status(500).send(responses.internalServerError500())
     }
 }
+const getUserPropertiesV2 = async (req, res) => {
+    try {
+        const userId = req.userId
+        //pagination page
+        const page = req.query.page && isNumber(req.query.page) ? parseInt(req.query.page) : 1;
+        const limit = req?.query?.limit ? parseInt(req.query.limit) : null;
+
+        const response = await propertyServices.getUserPropertiesV2(userId, page, limit);
+
+        for (let i = 0; i < response.data.length; i++) {
+            for (let j = 0; j < response.data[i].property_photos.length; j++) {
+                const fileId = response.data[i].property_photos[j].file_id;
+
+                if (fileId && isNumber(fileId)) {
+                    const propertyImageUrl = await s3ReadUrl(fileId)
+                    if (propertyImageUrl) {
+                        response.data[i].property_photos[j].photos = propertyImageUrl
+                    }
+                }
+
+
+            }
+        }
+
+
+        return res.status(200).send(ok200("", response.data, response.meta))
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(responses.internalServerError500())
+    }
+}
 
 const deleteProperty = async (req, res) => {
     try {
@@ -259,6 +290,150 @@ const getPropertiesSearchResult = async (req, res) => {
     }
 }
 
+const getPropertiesSearchResultV2 = async (req, res) => {
+    try {
+        const userId = parseInt(req.userId)
+        const purposeId = req.query.purposeId ? parseInt(req.query.purposeId) : undefined
+        // const homeTypeId = req.query.homeTypeId ? (req.query.homeTypeId).split(",").map(i => i && parseInt(i)) : undefined
+        const homeTypeId = req.query.homeTypeId
+            ? (req.query.homeTypeId)
+                .split(",")
+                .filter(i => /^\d+$/.test(i)) // Keep only pure numeric values
+                .map(Number) // Convert to integers
+            : undefined;
+        const userRoleId = req.query.userRoleId ? (req.query.userRoleId).split(",").map(Number) : undefined
+        const priceRange = req.query.priceRange ? (req.query.priceRange).split("-").map(Number) : undefined
+
+
+        const bedroomCount = req.query.bedroomCount ? (req.query.bedroomCount).split(",").map(Number) : undefined
+        const bathroomCount = req.query.bathroomCount ? (req.query.bathroomCount).split(",").map(Number) : undefined
+        const hallCount = req.query.hallCount ? (req.query.hallCount).split(",").map(Number) : undefined
+        const kitchenCount = req.query.kitchenCount ? (req.query.kitchenCount).split(",").map(Number) : undefined
+        const balconyCount = req.query.balconyCount ? (req.query.balconyCount).split(",").map(Number) : undefined
+
+
+        const builtUpArea = req.query.builtUpArea ? (req.query.builtUpArea).split("-").map(Number) : undefined
+        const maintenance = req.query.maintenance ? (req.query.maintenance).split("-").map(Number) : undefined
+        const propertyAge = req.query.propertyAge ? (req.query.propertyAge).split("-").map(Number) : undefined
+        const daysOnApp = req.query.daysOnApp ? (req.query.daysOnApp).split("-").map(Number) : undefined
+
+        const parkingSlotTwoWheelerCount = req.query.parkingSlotTwoWheelerCount ? (req.query.parkingSlotTwoWheelerCount).split(",").map(Number) : undefined
+        const parkingSlotFourWheelerCount = req.query.parkingSlotFourWheelerCount ? (req.query.parkingSlotFourWheelerCount).split(",").map(Number) : undefined
+
+
+        const totalFloor = req.query.totalFloor ? (req.query.totalFloor).split("-").map(Number) : undefined
+        const propertyFloor = req.query.propertyFloor ? (req.query.propertyFloor).split("-").map(Number) : undefined
+        const availabilityTypeId = req.query.availabilityTypeId ? (req.query.availabilityTypeId).split(",").map(Number) : undefined
+        const furnishingsId = req.query.furnishingsId ? (req.query.furnishingsId).split(",").map(Number) : undefined
+        const facingId = req.query.facingId ? (req.query.facingId).split(",").map(Number) : undefined
+        const cornerProperty = req.query.cornerProperty ? parseInt(req.query.cornerProperty) : undefined
+        const verifiedProperty = req.query.verifiedProperty ? parseInt(req.query.verifiedProperty) : undefined
+        const agentCertification = req.query.agentCertification ? parseInt(req.query.agentCertification) : undefined
+        // const possessionsId = req.query.possessionsId ? parseInt(req.query.possessionsId) : undefined
+        const possessionsId = req.query.possessionsId ? (req.query.possessionsId).split(",").map(Number) : undefined
+        const project_type_id = req.query.project_type_id ? (req.query.project_type_id).split(",").map(Number) : undefined
+        const tenantsId = req.query.tenantsId ? (req.query.tenantsId).split(",").map(Number) : undefined
+        const builder_id = req.query.builder_id ? (req.query.builder_id).split(",").map(Number) : undefined
+
+
+        const sorting = req.query.sorting ? req.query.sorting.split("-") : undefined
+
+        //pagination page
+        const page = req.query.page && isNumber(req.query.page) ? parseInt(req.query.page) : 1;
+
+        //map view
+        const view = req?.query?.view || undefined
+
+
+
+
+        const filters = {
+            purposeId,
+            homeTypeId,
+            userRoleId,
+            priceRange,
+            bedroomCount,
+            bathroomCount,
+            hallCount,
+            kitchenCount,
+            balconyCount,
+            builtUpArea,
+            maintenance,
+            propertyAge,
+            daysOnApp,
+            parkingSlotTwoWheelerCount,
+            parkingSlotFourWheelerCount,
+            totalFloor,
+            propertyFloor,
+            availabilityTypeId,
+            furnishingsId,
+            facingId,
+            cornerProperty,
+            verifiedProperty,
+            agentCertification,
+            possessionsId,
+            project_type_id,
+            tenantsId,
+            builder_id,
+            sorting
+
+        }
+
+
+        const swlat = parseFloat(req.params.swlat)
+        const swlong = parseFloat(req.params.swlong)
+        const nelat = parseFloat(req.params.nelat)
+        const nelong = parseFloat(req.params.nelong)
+
+
+        const limit = req?.query?.limit ? parseInt(req?.query?.limit) : undefined;
+
+        const response = await propertyServices.getPropertiesSearchResultV2(swlat, swlong, nelat, nelong, filters, page, view, userId, limit)
+
+
+        //Property Photos
+        if (view !== "map") {
+            for (let i = 0; i < response.data.length; i++) {
+                for (let j = 0; j < response.data[i].property_photos.length; j++) {
+                    const fileId = response.data[i].property_photos[j].file_id;
+
+                    if (fileId && isNumber(fileId)) {
+                        const propertyImageUrl = await s3ReadUrl(fileId)
+                        if (propertyImageUrl) {
+                            response.data[i].property_photos[j].photos = propertyImageUrl
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+
+        // if (response.data) {
+        //     return res.status(200).send({
+        //         message: "successful",
+        //         status: true,
+        //         data: response.data,
+        //         // currentUserId: userId ? userId : null,
+        //         meta: response.meta
+        //     })
+        // }
+
+        if (response.data) {
+            return res.status(200).send(ok200(
+                "sent successfully",
+                response.data,
+                response.meta
+            ))
+        }
+
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(responses.internalServerError500())
+    }
+}
+
 const getProperty = async (req, res) => {
     try {
         const userId = parseInt(req.userId)
@@ -267,6 +442,51 @@ const getProperty = async (req, res) => {
         const view = req?.query?.view || undefined;
 
         const property = await propertyServices.getProperty(propertyId, view, userId);
+
+
+        for (let j = 0; j < property.property_photos.length; j++) {
+            const fileId = property.property_photos[j].file_id;
+
+            if (fileId && isNumber(fileId)) {
+                const propertyImageUrl = await s3ReadUrl(fileId)
+                if (propertyImageUrl) {
+                    property.property_photos[j].photos = propertyImageUrl
+                }
+            }
+
+
+        }
+
+        if (property?.builder?.avatar) {
+            const BuilderAvatarUrl = await s3ReadUrl(property.builder.avatar)
+            property.builder.avatar = BuilderAvatarUrl
+        }
+        if (property?.agent_profile?.avatar) {
+            const AgentAvatarUrl = await s3ReadUrl(property.agent_profile.avatar)
+            property.agent_profile.avatar = AgentAvatarUrl
+        }
+
+
+
+
+
+
+        return res.status(200).send(responses.ok200("", property))
+
+    } catch (e) {
+        console.error(e)
+        return res.status(500).send(responses.internalServerError500())
+    }
+}
+
+const getPropertyV2 = async (req, res) => {
+    try {
+        const userId = parseInt(req.userId)
+        const propertyId = parseInt(req.params.id);
+
+        const view = req?.query?.view || undefined;
+
+        const property = await propertyServices.getPropertyV2(propertyId, view, userId);
 
 
         for (let j = 0; j < property.property_photos.length; j++) {
@@ -371,9 +591,21 @@ const update = async (req, res) => {
     }
 }
 
+const listings = async (req, res) => {
+    try {
+
+        const result = await propertyServices.findAndCountAll({ page: 1, limit: 10 })
+
+        return res.status(200).send(ok200("sent successfully", result.data, result.meta))
+    } catch (error) {
+        console.error(e)
+        return res.status(500).send(internalServerError500())
+    }
+}
+
 
 module.exports = {
     createProperty, getUserProperties, deleteProperty,
     getPropertiesSearchResult, getProperty, getProperties,
-    update
+    update, listings, getPropertiesSearchResultV2, getPropertyV2, getUserPropertiesV2
 }

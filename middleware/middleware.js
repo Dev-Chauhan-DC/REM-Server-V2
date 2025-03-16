@@ -34,6 +34,36 @@ const isAuthenticate = async (req, res, next) => {
 
 }
 
+const isAuthenticateWithNext = async (req, res, next) => {
+
+    try {
+        const token = req?.headers?.authorization;
+        if (!token) {
+            return next();
+        }
+        const verifyToken = jwt.verify(token, process.env.JWT_KEY);
+
+        const user = await userServices.findOneUser({
+            where: {
+                id: parseInt(verifyToken.id)
+            }
+        })
+
+        if (!user) {
+            return next();
+        }
+
+        req.user = user;
+
+        req.userId = verifyToken.id;
+        return next();
+    } catch (error) {
+        console.error(error)
+        return next();
+    }
+
+}
+
 const isUserSubscriptionActive = async (req, res, next) => {
 
     try {
@@ -94,4 +124,4 @@ const checkSubscription = async (req, res, next) => {
 }
 
 
-module.exports = { isAuthenticate, isUserSubscriptionActive, checkSubscription }
+module.exports = { isAuthenticate, isUserSubscriptionActive, checkSubscription, isAuthenticateWithNext }
