@@ -15,7 +15,20 @@ const propertyRoutes = (app) => {
         propertyValidator.getPropertiesSearchResult, validate,
         propertyControllers.getPropertiesSearchResult);
 
+    app.get(`${prepath}/properties-v2/:swlat/:swlong/:nelat/:nelong`,
+        middlewares.isAuthenticateWithNext,
+        propertyValidator.getPropertiesSearchResult,
+        validate,
+        propertyControllers.getPropertiesSearchResultV2);
+
+    app.get(`${prepath}/listings`, propertyControllers.listings)
+
     app.post(`${prepath}/property`, propertyControllers.getProperty);
+
+    app.get(`${prepath}/property/:id`,
+        middlewares.isAuthenticateWithNext,
+        propertyControllers.getPropertyV2);
+
     app.get(`${prepath}/properties`, propertyValidator.getProperties, propertyControllers.getProperties);
 
 
@@ -24,6 +37,10 @@ const propertyRoutes = (app) => {
     app.get(`${prepath}/user/properties`,
         middlewares.isAuthenticate,
         propertyControllers.getUserProperties);
+
+    app.get(`${prepath}/properties/user`,
+        middlewares.isAuthenticate,
+        propertyControllers.getUserPropertiesV2);
 
 
 

@@ -16,6 +16,11 @@ const savedPropertyRoutes = (app) => {
     app.get(`${prepath}/properties/saved`,
         middlewares.isAuthenticate,
         savePropertyControllers.getSavedProperties);
+
+
+    app.get(`${prepath}/saved-property`,
+        middlewares.isAuthenticate,
+        savePropertyControllers.getSavedPropertiesV2);
 }
 
 module.exports = savedPropertyRoutes

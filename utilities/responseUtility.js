@@ -1,8 +1,9 @@
-function ok200(message, data) {
+function ok200(message = "Success", data = null, meta = {}) {
     return {
-        message: message ? message : "Success",
+        message: message,
         success: true,
-        data: data ? data : null
+        data: data,
+        meta: meta
     }
 }
 
