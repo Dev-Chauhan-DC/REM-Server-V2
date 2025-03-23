@@ -1,4 +1,7 @@
 const ConversationModel = require("../models/index").conversation;
+const UserModel = require("../models/index").users;
+const { Op } = require('sequelize');
+
 
 
 const create = async (data) => {
@@ -36,4 +39,59 @@ const destroy = async (condition) => {
     }
 }
 
-module.exports = { create, findAll, update, destroy }
+const createIfNotPresent = async (user1_id, user2_id) => {
+    try {
+        let conversation = await ConversationModel.findOne({
+            where: {
+                [Op.or]: [
+                    { user1_id, user2_id },
+                    { user1_id: user2_id, user2_id: user1_id } // Check reversed order
+                ]
+            }
+        });
+
+        if (!conversation) {
+            conversation = await ConversationModel.create({ user1_id, user2_id });
+        }
+
+        return conversation;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getConversationsByUser = async (userId) => {
+    try {
+        const conversations = await ConversationModel.findAll({
+            where: {
+                [Op.or]: [
+                    { user1_id: userId },
+                    { user2_id: userId }
+                ]
+            },
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+            include: [
+                {
+                    model: UserModel,
+                    attributes: ['id', 'first_name'],
+                    as: 'user1',
+                },
+                {
+                    model: UserModel,
+                    attributes: ['id', 'first_name'],
+                    as: 'user2',
+                }
+            ]
+        });
+
+        return conversations;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+module.exports = {
+    create, findAll, update, destroy, createIfNotPresent
+    , getConversationsByUser
+}

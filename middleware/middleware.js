@@ -98,8 +98,6 @@ const isUserSubscriptionActive = async (req, res, next) => {
     }
 }
 
-
-
 const checkSubscription = async (req, res, next) => {
     try {
 
@@ -123,5 +121,34 @@ const checkSubscription = async (req, res, next) => {
     }
 }
 
+// Middleware to verify token for protected events
+const authenticateSocket = async (socket, next) => {
+    const token = socket.handshake.auth?.token;
 
-module.exports = { isAuthenticate, isUserSubscriptionActive, checkSubscription, isAuthenticateWithNext }
+    if (!token) {
+        return next(new Error("Authentication required"));
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+        const user = await userServices.findOneUser({
+            where: {
+                id: parseInt(decoded.id)
+            }
+        })
+
+        if (!user) {
+            return next(new Error("User not found"));
+        }
+
+
+        socket.user = user;
+        next();
+    } catch (error) {
+        return next(new Error("Invalid token"));
+    }
+};
+
+
+module.exports = { authenticateSocket, isAuthenticate, isUserSubscriptionActive, checkSubscription, isAuthenticateWithNext }

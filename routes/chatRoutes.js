@@ -7,6 +7,10 @@ const ChatRoutes = (app) => {
     app.post(`${prepath}/chat`,
         middlewares.isAuthenticate,
         chatControllers.create);
+
+    app.get(`${prepath}/chat/:conversation_id`,
+        middlewares.isAuthenticate,
+        chatControllers.get);
 }
 
 

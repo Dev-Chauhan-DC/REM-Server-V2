@@ -36,4 +36,30 @@ const destroy = async (condition) => {
     }
 }
 
-module.exports = { create, findAll, update, destroy }
+const findAndCountAll = async ({ page = 1, limit = 10, where }) => {
+    try {
+        const offset = (page - 1) * limit;
+
+        const response = await ChatModel.findAndCountAll({
+            distinct: true,
+            where: where,
+            limit,
+            offset,
+            order: [['createdAt', 'DESC']],
+        });
+
+        return {
+            data: response.rows,
+            meta: {
+                total: response.count,
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalPages: Math.ceil(response.count / limit),
+            }
+        }
+    } catch (e) {
+        throw e;
+    }
+};
+
+module.exports = { create, findAll, update, destroy, findAndCountAll }
