@@ -6,6 +6,7 @@ let io;
 const initializeSocket = (server) => {
     io = new Server(server, {
         cors: { origin: "*" },
+        path: "/api/socket.io",
     });
 
     io.on("connection", (socket) => {
