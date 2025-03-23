@@ -24,6 +24,8 @@ const PhotoCategoryRoutes = require('./photoCategoryRoutes')
 const AreaRoutes = require('./areaRoutes')
 const DistrictRoutes = require('./districtRoutes')
 const StateRoutes = require('./stateRoutes')
+const ConversationRoutes = require('./conversationRoutes')
+const ChatRoutes = require('./chatRoutes')
 
 
 const index = (app) => {
@@ -55,6 +57,8 @@ const index = (app) => {
     AreaRoutes(app)
     DistrictRoutes(app)
     StateRoutes(app)
+    ConversationRoutes(app)
+    ChatRoutes(app)
 
 }
 
