@@ -13,6 +13,7 @@ const initializeSocket = (server) => {
         path: "/api/socket.io",
     });
 
+
     io.on("connection", (socket) => {
 
         authenticateSocket(socket, (err) => {
