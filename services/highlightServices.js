@@ -1,20 +1,9 @@
-const PropertyAmenities = require("../models/index").property_amenities;
-
-const createPropertyAmenities = async (arr) => {
-
-    try {
-        const amenities = await PropertyAmenities.bulkCreate(arr)
-
-        return amenities;
-    } catch (e) {
-        throw e
-    }
-}
+const PropertyHighlightModel = require("../models/index").property_highlight;
 
 
 const create = async (data) => {
     try {
-        const response = await PropertyAmenities.create(data)
+        const response = await PropertyHighlightModel.create(data)
         return response
     } catch (e) {
         throw e;
@@ -23,7 +12,7 @@ const create = async (data) => {
 
 const findOne = async (where) => {
     try {
-        const response = await PropertyAmenities.findOne({ where })
+        const response = await PropertyHighlightModel.findOne({ where })
         return response
     } catch (e) {
         throw e;
@@ -32,7 +21,7 @@ const findOne = async (where) => {
 
 const update = async (where, data) => {
     try {
-        const response = await PropertyAmenities.update(data, {
+        const response = await PropertyHighlightModel.update(data, {
             where: where,
         })
         return response
@@ -43,7 +32,7 @@ const update = async (where, data) => {
 
 const findAll = async (condition) => {
     try {
-        const response = await PropertyAmenities.findAll(condition)
+        const response = await PropertyHighlightModel.findAll(condition)
         const plainBuilders = response.map(builder => builder.toJSON());
         return plainBuilders
     } catch (e) {
@@ -53,7 +42,7 @@ const findAll = async (condition) => {
 
 const destroy = async (condition) => {
     try {
-        const response = await PropertyAmenities.destroy(condition);
+        const response = await PropertyHighlightModel.destroy(condition);
         return response;
     } catch (e) {
         throw e;
@@ -61,7 +50,7 @@ const destroy = async (condition) => {
 }
 const bulkCreate = async (records) => {
     try {
-        const response = await PropertyAmenities.bulkCreate(records);
+        const response = await PropertyHighlightModel.bulkCreate(records);
         return response;
     } catch (e) {
         throw e;
@@ -69,6 +58,4 @@ const bulkCreate = async (records) => {
 }
 
 
-module.exports = { createPropertyAmenities, destroy, findAll, create, update, findOne, bulkCreate }
-
-
+module.exports = { destroy, findAll, create, update, findOne, bulkCreate }

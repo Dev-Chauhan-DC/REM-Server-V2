@@ -33,6 +33,12 @@ const userRoutes = (app) => {
         middlewares.isAuthenticate,
         userValidator.updateProfileInfoValidator, validate,
         userControllers.updateProfileInfo);
+
+
+
+    app.put(`${prepath}/user`,
+        middlewares.isAuthenticate,
+        userControllers.userUpdate);
 }
 
 

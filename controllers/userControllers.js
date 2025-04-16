@@ -112,6 +112,26 @@ const getUserV2 = async (req, res) => {
         return res.status(500).send(responses.internalServerError500());
     }
 }
+const userUpdate = async (req, res) => {
+    try {
+        const userId = parseInt(req.user.id);
+        const user = req.body
+
+        const result = await userServices.update({
+            first_name: user.first_name
+        },
+            {
+                where: {
+                    id: userId
+                }
+            })
+
+        return res.status(200).send(responses.ok200('updated', result))
+    } catch (e) {
+        console.error(error);
+        return res.status(500).send(responses.internalServerError500());
+    }
+}
 
 
-module.exports = { updateRole, getUser, updateProfileInfo, getUserV2 }
+module.exports = { userUpdate, updateRole, getUser, updateProfileInfo, getUserV2 }

@@ -15,6 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'properties_id'
       })
 
+      properties.hasMany(models.property_preference, {
+        foreignKey: 'property_id'
+      })
+
+      properties.hasMany(models.property_highlight, {
+        foreignKey: 'property_id'
+      })
+
       properties.hasMany(models.property_photos, {
         foreignKey: 'properties_id'
       })
@@ -37,6 +45,14 @@ module.exports = (sequelize, DataTypes) => {
 
       properties.belongsTo(models.facings, {
         foreignKey: 'facing_id'
+      })
+
+      properties.belongsTo(models.looking_for, {
+        foreignKey: 'looking_for_id'
+      })
+
+      properties.belongsTo(models.occupancy, {
+        foreignKey: 'occupancy_id'
       })
 
       properties.belongsTo(models.flooring_types, {
@@ -141,7 +157,10 @@ module.exports = (sequelize, DataTypes) => {
     agent_id: DataTypes.INTEGER,
     builder_id: DataTypes.INTEGER,
     price_on_demand: DataTypes.TINYINT,
-    title: DataTypes.STRING
+    title: DataTypes.STRING,
+    looking_for_id: DataTypes.INTEGER,
+    occupancy_id: DataTypes.INTEGER,
+    description_roomie: DataTypes.TEXT,
   }, {
     sequelize,
     modelName: 'properties',

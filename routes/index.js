@@ -26,6 +26,9 @@ const DistrictRoutes = require('./districtRoutes')
 const StateRoutes = require('./stateRoutes')
 const ConversationRoutes = require('./conversationRoutes')
 const ChatRoutes = require('./chatRoutes')
+const preferenceRoutes = require('./preferenceRoutes')
+const highlightRoutes = require('./highlightRoutes')
+const olaRouter = require('./olaRoutes')
 
 
 const index = (app) => {
@@ -59,6 +62,9 @@ const index = (app) => {
     StateRoutes(app)
     ConversationRoutes(app)
     ChatRoutes(app)
+    preferenceRoutes(app)
+    highlightRoutes(app)
+    olaRouter(app)
 
 }
 

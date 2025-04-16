@@ -4,6 +4,8 @@ const PropertyPhotos = require("../models/index").property_photos
 const SavePropertyModel = require("../models/index").saved_properties
 const UserRolesModel = require("../models/index").user_roles
 const PhotoCategoryModel = require("../models/index").property_photo_categories;
+const LookingForModel = require("../models/index").looking_for
+
 
 
 
@@ -171,7 +173,7 @@ const getSavedPropertiesV2 = async (userId, sorting, page, limitA) => {
             include: [
                 {
                     model: PropertyModel,
-                    attributes: ["latitude", "longitude", "id", "price", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt", "price_on_demand"],
+                    attributes: ["home_types_id", "latitude", "longitude", "id", "price", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt", "price_on_demand"],
                     include: [
                         {
                             model: PropertyPhotos,
@@ -183,6 +185,9 @@ const getSavedPropertiesV2 = async (userId, sorting, page, limitA) => {
                                 }
 
                             ]
+                        },
+                        {
+                            model: LookingForModel,
                         },
                     ]
                 },

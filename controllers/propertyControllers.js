@@ -28,6 +28,8 @@ const createProperty = async (req, res) => {
             carpetArea: parseFloat(req.body.carpetArea) || 0,
             plotArea: req.body.plotArea ? parseFloat(req.body.plotArea) : 0,
             facingId: parseInt(req.body.facingId) || 0,
+            lookingForId: parseInt(req.body.lookingForId) || 0,
+            occupancyId: parseInt(req.body.occupancyId) || 0,
             propertyAge: parseFloat(req.body.propertyAge) || 0,
             totalFloor: parseFloat(req.body.totalFloor) || 0,
             propertyFloor: parseFloat(req.body.propertyFloor) || 0,
@@ -46,6 +48,7 @@ const createProperty = async (req, res) => {
             cupboard: parseInt(req.body.cupboard) || 0,
             kitchenTypesId: parseInt(req.body.kitchenTypesId) || 0,
             propertyDescription: req.body.propertyDescription,
+            descriptionRoomie: req.body.descriptionRoomie,
             gatedSecurity: parseInt(req.body.gatedSecurity),
             gym: parseInt(req.body.gym) || 0,
             waterSuppliesId: parseInt(req.body.waterSuppliesId) || 0,
@@ -441,7 +444,7 @@ const getProperty = async (req, res) => {
 
         const view = req?.query?.view || undefined;
 
-        const property = await propertyServices.getProperty(propertyId, view, userId);
+        const property = await propertyServices.getPropertyV2(propertyId, view, userId);
 
 
         for (let j = 0; j < property.property_photos.length; j++) {

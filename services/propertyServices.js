@@ -11,6 +11,8 @@ const AmenityModel = require("../models/index").amenities
 const PurposeModel = require("../models/index").purposes
 const HomeTypeModel = require("../models/index").home_types
 const FacingModel = require("../models/index").facings
+const LookingForModel = require("../models/index").looking_for
+const OccupancyModel = require("../models/index").occupancy
 const FlooringTypeModel = require("../models/index").flooring_types
 const OwnershipTypeModel = require("../models/index").ownership_types
 const AvailabilityTypeModel = require("../models/index").availability_types
@@ -25,6 +27,10 @@ const UserSubscriptionPlan = require("../models/index").subscription_plans
 const CouponeModel = require("../models/index").coupons
 const UserSubscriptionModel = require("../models/index").user_subscriptions
 const PhotoCategoryModel = require("../models/index").property_photo_categories;
+const PropertyPreferenceModel = require("../models/index").property_preference;
+const PreferenceModel = require("../models/index").preference;
+const HighlightModel = require("../models/index").highlight;
+const PropertyHighlightModel = require("../models/index").property_highlight;
 
 
 const createProperty = async (data) => {
@@ -50,6 +56,8 @@ const createProperty = async (data) => {
             carpet_area: data.carpetArea,
             plot_area: data.plotArea,
             facing_id: data.facingId,
+            looking_for_id: data.lookingForId,
+            occupancy_id: data.occupancyId,
             property_age: data.propertyAge,
             total_floor: data.totalFloor,
             property_floor: data.propertyFloor,
@@ -68,6 +76,7 @@ const createProperty = async (data) => {
             cupboard: data.cupboard,
             kitchen_types_id: data.kitchenTypesId,
             property_description: data.propertyDescription,
+            description_roomie: data.descriptionRoomie,
             gated_security: data.gatedSecurity,
             gym: data.gym,
             water_supplies_id: data.waterSuppliesId,
@@ -140,7 +149,7 @@ const getUserPropertiesV2 = async (userId, page, ALimit) => {
             where: {
                 user_id: userId
             },
-            attributes: ["id", "price", "price_on_demand", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
+            attributes: ["home_types_id", "id", "price", "price_on_demand", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
             include: [
                 {
                     model: PropertyPhotos,
@@ -157,6 +166,9 @@ const getUserPropertiesV2 = async (userId, page, ALimit) => {
                     model: UserModel,
                     attributes: ["agency_name", "company_name"],
                     include: [{ model: UserRolesModel }]
+                },
+                {
+                    model: LookingForModel,
                 }
             ]
         })
@@ -571,6 +583,22 @@ const getPropertyV2 = async (propertyId, view, userId) => {
             ]
         },
         {
+            model: PropertyPreferenceModel,
+            include: [
+                {
+                    model: PreferenceModel
+                }
+            ]
+        },
+        {
+            model: PropertyHighlightModel,
+            include: [
+                {
+                    model: HighlightModel
+                }
+            ]
+        },
+        {
             model: PropertyPhotos,
             include: [
                 {
@@ -599,6 +627,12 @@ const getPropertyV2 = async (propertyId, view, userId) => {
         },
         {
             model: FacingModel,
+        },
+        {
+            model: LookingForModel,
+        },
+        {
+            model: OccupancyModel,
         },
         {
             model: FlooringTypeModel,
@@ -660,6 +694,9 @@ const getPropertyV2 = async (propertyId, view, userId) => {
                     model: UserRolesModel
                 }
             ]
+        },
+        {
+            model: LookingForModel,
         }
     ]
 
@@ -688,7 +725,7 @@ const getPropertyV2 = async (propertyId, view, userId) => {
             where: {
                 id: propertyId,
             },
-            attributes: view === "card" ? ['price_on_demand', 'address', 'bedroom_count', 'bathroom_count', 'hall_count', 'kitchen_count', 'balcony_count', 'built_up_area', 'price', 'createdAt', "id"] : { exclude: [] },
+            attributes: view === "card" ? ['home_types_id', 'price_on_demand', 'address', 'bedroom_count', 'bathroom_count', 'hall_count', 'kitchen_count', 'balcony_count', 'built_up_area', 'price', 'createdAt', "id"] : { exclude: [] },
             include: view === "card" ? includesCard : includesFull,
 
         })
@@ -837,7 +874,7 @@ const getPropertiesSearchResultV2 = async (swlat, swlong, nelat, nelong, filters
                         model: PhotoCategoryModel,
                         attributes: ["name", "id"]
 
-                    }
+                    },
 
                 ]
             },
@@ -858,7 +895,10 @@ const getPropertiesSearchResultV2 = async (swlat, swlong, nelat, nelong, filters
                     },
 
                 ],
-            }
+            },
+            {
+                model: LookingForModel,
+            },
         ]
 
         // if (userId) {
@@ -1028,7 +1068,9 @@ const getPropertiesSearchResultV2 = async (swlat, swlong, nelat, nelong, filters
 
 
             },
-            attributes: view === "map" ? ["latitude", "longitude", "id", "price", "price_on_demand"] : ["latitude", "longitude", "id", "price", "price_on_demand", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
+            attributes: view === "map" ?
+                ["latitude", "longitude", "id", "price", "price_on_demand"] :
+                ["home_types_id", "latitude", "longitude", "id", "price", "price_on_demand", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
 
         })
 

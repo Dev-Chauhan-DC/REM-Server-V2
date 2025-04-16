@@ -16,6 +16,10 @@ const propertyAmenitiesRoutes = (app) => {
         createPropertyAmenitiesValidator,
         validate,
         propertyAmenitiesControllers.createPropertyAmenities);
+
+
+    app.put(`${prepath}/amenity/bulk-update`, middlewares.isAuthenticate, propertyAmenitiesControllers.bulkUpdate);
+
 }
 
 module.exports = propertyAmenitiesRoutes
