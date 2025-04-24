@@ -22,7 +22,7 @@ const createProperty = [
     body('homeTypeId')
         .notEmpty().withMessage('House Type is Required')
         .isInt().withMessage('Invalid House Type')
-        .isIn([1, 2, 3, 4, 5]).withMessage('House Type must be 1, 2, 3, or 4'),
+        .isIn([1, 2, 3, 4, 5, 6]).withMessage('Wrong Property Type'),
     body('address').isLength({ min: 11 })
         .withMessage('Address must be longer than 10 characters'),
     body('bedroomCount')

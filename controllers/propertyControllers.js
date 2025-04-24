@@ -3,7 +3,7 @@ const responseUtilities = require('../utilities/responseUtilities');
 const { s3ReadUrl } = require("../utilities/s3");
 const { isNumber } = require("../utilities/validator");
 const responses = new responseUtilities()
-const { ok200, badRequest400, internalServerError500, notFound404 } = require('../utilities/responseUtility.js')
+const { ok200, badRequest400, internalServerError500 } = require('../utilities/responseUtility.js')
 
 
 const createProperty = async (req, res) => {
@@ -14,6 +14,10 @@ const createProperty = async (req, res) => {
             purposeId: parseInt(req.body.purposeId),
             homeTypeId: parseInt(req.body.homeTypeId),
             address: req.body.address,
+            singleSharing: parseInt(req.body.singleSharing),
+            doubleSharing: parseInt(req.body.doubleSharing),
+            tripleSharing: parseInt(req.body.tripleSharing),
+            fourSharing: parseInt(req.body.fourSharing),
             landmark: req.body.landmark,
             area: req.body.area,
             pincode: req.body.pincode,
@@ -29,6 +33,7 @@ const createProperty = async (req, res) => {
             plotArea: req.body.plotArea ? parseFloat(req.body.plotArea) : 0,
             facingId: parseInt(req.body.facingId) || 0,
             lookingForId: parseInt(req.body.lookingForId) || 0,
+            noticePeriodId: parseInt(req.body.noticePeriodId) || 0,
             occupancyId: parseInt(req.body.occupancyId) || 0,
             propertyAge: parseFloat(req.body.propertyAge) || 0,
             totalFloor: parseFloat(req.body.totalFloor) || 0,
@@ -60,6 +65,7 @@ const createProperty = async (req, res) => {
             flatsInBuilding: parseInt(req.body.flatsInBuilding) || 0,
             deposit: parseFloat(req.body.deposit) || 0,
             tenantsId: parseInt(req.body.tenantsId) || 0,
+
         }
         const property = await propertyServices.createProperty(data)
 
@@ -381,7 +387,6 @@ const getPropertiesSearchResultV2 = async (req, res) => {
             sorting
 
         }
-
 
         const swlat = parseFloat(req.params.swlat)
         const swlong = parseFloat(req.params.swlong)

@@ -31,6 +31,8 @@ const PropertyPreferenceModel = require("../models/index").property_preference;
 const PreferenceModel = require("../models/index").preference;
 const HighlightModel = require("../models/index").highlight;
 const PropertyHighlightModel = require("../models/index").property_highlight;
+const MealModel = require("../models/index").meal_type;
+const PropertyMealModel = require("../models/index").property_meal_types;
 
 
 const createProperty = async (data) => {
@@ -42,6 +44,10 @@ const createProperty = async (data) => {
             purpose_id: data.purposeId,
             home_types_id: data.homeTypeId,
             address: data.address,
+            single_sharing: data.singleSharing,
+            double_sharing: data.doubleSharing,
+            triple_sharing: data.tripleSharing,
+            four_sharing: data.fourSharing,
             landmark: data.landmark,
             area: data.area,
             pincode: data.pincode,
@@ -57,6 +63,7 @@ const createProperty = async (data) => {
             plot_area: data.plotArea,
             facing_id: data.facingId,
             looking_for_id: data.lookingForId,
+            notice_period_id: data.noticePeriodId,
             occupancy_id: data.occupancyId,
             property_age: data.propertyAge,
             total_floor: data.totalFloor,
@@ -599,6 +606,9 @@ const getPropertyV2 = async (propertyId, view, userId) => {
             ]
         },
         {
+            model: PropertyMealModel,
+        },
+        {
             model: PropertyPhotos,
             include: [
                 {
@@ -888,7 +898,7 @@ const getPropertiesSearchResultV2 = async (swlat, swlong, nelat, nelong, filters
                             }
                         }
                     } : {}),
-                attributes: ["agency_name", "company_name", "user_roles_id"],
+                attributes: ["agency_name", "company_name", "user_roles_id", "id"],
                 include: [
                     {
                         model: UserRolesModel,

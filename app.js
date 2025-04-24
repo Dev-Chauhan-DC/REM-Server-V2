@@ -30,6 +30,6 @@ routes(app);
 initializeSocket(server);
 
 server.listen(port, () => {
-    console.log("server is running on ", port)
+    console.info("server is running on ", port)
 })
 

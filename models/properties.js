@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'property_id'
       })
 
+      properties.hasMany(models.property_meal_types, {
+        foreignKey: 'property_id'
+      })
+
       properties.hasMany(models.property_photos, {
         foreignKey: 'properties_id'
       })
@@ -161,6 +165,11 @@ module.exports = (sequelize, DataTypes) => {
     looking_for_id: DataTypes.INTEGER,
     occupancy_id: DataTypes.INTEGER,
     description_roomie: DataTypes.TEXT,
+    single_sharing: DataTypes.INTEGER,
+    double_sharing: DataTypes.INTEGER,
+    triple_sharing: DataTypes.INTEGER,
+    four_sharing: DataTypes.INTEGER,
+    notice_period_id: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'properties',
