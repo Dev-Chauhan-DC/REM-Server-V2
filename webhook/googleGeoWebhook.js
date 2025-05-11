@@ -42,5 +42,36 @@ const getPlaceDetails = async (req, res) => {
 }
 
 
+const autocomplete = async (params) => {
+    try {
 
-module.exports = { getPlace, getPlaceDetails }
+        const result = await axios.get(process.env.GOOGLE_MAPS_URL + '/maps/api/place/autocomplete/json', {
+            params: {
+                key: process.env.GOOGLE_MAP_API,
+                ...params
+            },
+        });
+
+        return result.data
+    } catch (e) {
+        throw e
+    }
+}
+
+const place = async (params) => {
+    try {
+        const result = await axios.get(process.env.GOOGLE_MAPS_URL + `/maps/api/place/details/json`, {
+            params: {
+                key: process.env.GOOGLE_MAP_API,
+                ...params
+            }
+        })
+
+        return result.data;
+    } catch (error) {
+        throw e
+    }
+}
+
+
+module.exports = { getPlace, getPlaceDetails, autocomplete, place }

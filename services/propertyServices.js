@@ -957,31 +957,6 @@ const getPropertiesSearchResultV2 = async (swlat, swlong, nelat, nelong, filters
 
         const { count, rows } = await PropertyModel.findAndCountAll({
             distinct: true,
-            ...(view === "map" ?
-                {
-                    include: [
-                        {
-                            model: UserModel,
-                            attributes: ["id"],
-                            ...(filters.userRoleId ?
-                                {
-                                    where: {
-                                        user_roles_id: {
-                                            [Op.in]: filters.userRoleId
-                                        }
-                                    }
-                                } : {}),
-                        }
-                    ]
-                } :
-                {
-                    limit: limit,
-                    offset: offset,
-                    include: includesArray,
-                    ...(filters.sorting ?
-                        { order: [filters.sorting] } : {})
-                }
-            ),
             where: {
                 latitude: {
                     [Op.between]: [swlat, nelat],
@@ -1078,9 +1053,36 @@ const getPropertiesSearchResultV2 = async (swlat, swlong, nelat, nelong, filters
 
 
             },
+            ...(view === "map" ?
+                {
+                    include: [
+                        {
+                            model: UserModel,
+                            attributes: ["id"],
+                            ...(filters.userRoleId ?
+                                {
+                                    where: {
+                                        user_roles_id: {
+                                            [Op.in]: filters.userRoleId
+                                        }
+                                    }
+                                } : {}),
+                        }
+                    ]
+                } :
+                {
+                    include: includesArray,
+                    ...(filters.sorting ?
+                        { order: [filters.sorting] } : {})
+                }
+            ),
             attributes: view === "map" ?
                 ["latitude", "longitude", "id", "price", "price_on_demand"] :
                 ["home_types_id", "latitude", "longitude", "id", "price", "price_on_demand", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
+            ...(view === "map" ? {} : {
+                limit: limit,
+                offset: offset,
+            })
 
         })
 
@@ -1104,6 +1106,140 @@ const getPropertiesSearchResultV2 = async (swlat, swlong, nelat, nelong, filters
     }
 
 }
+const getPropertiesSearchResultV3 = async (swlat, swlong, nelat, nelong, filters, page, view, userId, limitA) => {
+    try {
+        // Define includes
+        const includesArray = [
+            {
+                model: PropertyPhotos,
+                include: [{
+                    model: PhotoCategoryModel,
+                    attributes: ["name", "id"]
+                }]
+            },
+            {
+                model: UserModel,
+                ...(filters.userRoleId ? {
+                    where: {
+                        user_roles_id: {
+                            [Op.in]: filters.userRoleId
+                        }
+                    }
+                } : {}),
+                attributes: ["agency_name", "company_name", "user_roles_id", "id"],
+                include: [{ model: UserRolesModel }],
+            },
+            { model: LookingForModel },
+        ];
+
+        // Include saved properties if userId exists
+        if (userId) {
+            includesArray.push({
+                model: SavePropertyModel,
+                required: false,
+                where: { user_id: userId },
+                attributes: ["id"],
+            });
+        }
+
+        // Handle sorting
+        if (filters.sorting) {
+            if (filters.sorting.length >= 2) {
+                filters.sorting[1] = filters.sorting[1] === "highToLow" ? "DESC" : "ASC";
+            } else if (["relevance", "newest"].includes(filters.sorting[0])) {
+                filters.sorting = ["createdAt", "DESC"];
+            }
+        }
+
+        // Pagination setup
+        const limit = limitA || 3;
+        const offset = (page - 1) * limit;
+
+        // Days on app filter
+        const startDate = new Date();
+        const endDate = new Date();
+        if (filters.daysOnApp) {
+            startDate.setDate(startDate.getDate() - filters.daysOnApp[1]);
+            endDate.setDate(endDate.getDate() - filters.daysOnApp[0]);
+        }
+
+        // Build where clause
+        const whereClause = {
+            latitude: { [Op.between]: [swlat, nelat] },
+            longitude: { [Op.between]: [swlong, nelong] },
+            ...(filters.homeTypeId?.length ? { home_types_id: { [Op.in]: filters.homeTypeId } } : {}),
+            ...(filters.purposeId ? { purpose_id: filters.purposeId } : {}),
+            ...(filters.priceRange ? { price: { [Op.between]: filters.priceRange } } : {}),
+            ...(filters.bedroomCount ? { bedroom_count: { [Op.in]: filters.bedroomCount } } : {}),
+            ...(filters.bathroomCount ? { bathroom_count: { [Op.in]: filters.bathroomCount } } : {}),
+            ...(filters.hallCount ? { hall_count: { [Op.in]: filters.hallCount } } : {}),
+            ...(filters.kitchenCount ? { kitchen_count: { [Op.in]: filters.kitchenCount } } : {}),
+            ...(filters.balconyCount ? { balcony_count: { [Op.in]: filters.balconyCount } } : {}),
+            ...(filters.builtUpArea ? { built_up_area: { [Op.between]: filters.builtUpArea } } : {}),
+            ...(filters.maintenance ? { maintenance: { [Op.between]: filters.maintenance } } : {}),
+            ...(filters.propertyAge ? { property_age: { [Op.between]: filters.propertyAge } } : {}),
+            ...(filters.daysOnApp ? { createdAt: { [Op.between]: [startDate, endDate] } } : {}),
+            ...(filters.parkingSlotTwoWheelerCount ? { parking_slot_two_wheeler_count: { [Op.in]: filters.parkingSlotTwoWheelerCount } } : {}),
+            ...(filters.parkingSlotFourWheelerCount ? { parking_slot_four_wheeler_count: { [Op.in]: filters.parkingSlotFourWheelerCount } } : {}),
+            ...(filters.totalFloor ? { total_floor: { [Op.between]: filters.totalFloor } } : {}),
+            ...(filters.propertyFloor ? { property_floor: { [Op.between]: filters.propertyFloor } } : {}),
+            ...(filters.availabilityTypeId ? { availability_types_id: { [Op.in]: filters.availabilityTypeId } } : {}),
+            ...(filters.furnishingsId ? { furnishings_id: { [Op.in]: filters.furnishingsId } } : {}),
+            ...(filters.facingId ? { facing_id: { [Op.in]: filters.facingId } } : {}),
+            ...(filters.cornerProperty === 0 || filters.cornerProperty === 1 ? { corner_property: filters.cornerProperty } : {}),
+            ...(filters.verifiedProperty === 0 || filters.verifiedProperty === 1 ? { verified_property: filters.verifiedProperty } : {}),
+            ...(filters.agentCertification === 0 || filters.agentCertification === 1 ? { agent_certification: filters.agentCertification } : {}),
+            ...(filters.possessionsId ? { possessions_id: { [Op.in]: filters.possessionsId } } : {}),
+            ...(filters.project_type_id ? { project_type_id: { [Op.in]: filters.project_type_id } } : {}),
+            ...(filters.tenantsId ? { tenants_id: { [Op.in]: filters.tenantsId } } : {}),
+            ...(filters.builder_id ? { builder_id: { [Op.in]: filters.builder_id } } : {}),
+        };
+
+        // Fetch properties (all results, filter in includes works)
+        const properties = await PropertyModel.findAll({
+            where: whereClause,
+            include: view === "map" ? [{
+                model: UserModel,
+                attributes: ["id"],
+                ...(filters.userRoleId ? {
+                    where: { user_roles_id: { [Op.in]: filters.userRoleId } }
+                } : {}),
+            }] : includesArray,
+            order: filters.sorting ? [filters.sorting] : [],
+            attributes: view === "map"
+                ? ["latitude", "longitude", "id", "price", "price_on_demand"]
+                : ["home_types_id", "latitude", "longitude", "id", "price", "price_on_demand", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
+        });
+
+        // Paginate manually only if view !== "map"
+        const finalProperties = view !== "map"
+            ? properties.slice(offset, offset + limit)
+            : properties;
+
+        // Format response
+        const formattedData = finalProperties.map(property => ({
+            ...property.toJSON(),
+            isSaved: property?.saved_properties && property?.saved_properties?.length > 0,
+        }));
+
+        return {
+            data: formattedData,
+            meta: {
+                total: properties.length,
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalPages: Math.ceil(properties.length / limit),
+            }
+        };
+
+
+    } catch (e) {
+        throw e;
+    }
+};
+
+
+
 
 const findAndCountAll = async ({ page, limit }) => {
     try {
@@ -1133,5 +1269,5 @@ module.exports = {
     createProperty, getUserProperties, deleteProperty,
     getPropertiesSearchResult, getProperty, getPropertiesById,
     getPropertyWhere, findAll, update, findOne, findAndCountAll, getPropertiesSearchResultV2,
-    getPropertyV2, getUserPropertiesV2
+    getPropertyV2, getUserPropertiesV2, getPropertiesSearchResultV3
 }

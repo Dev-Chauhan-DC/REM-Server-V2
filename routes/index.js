@@ -30,6 +30,7 @@ const preferenceRoutes = require('./preferenceRoutes')
 const highlightRoutes = require('./highlightRoutes')
 const mealRoutes = require('./mealRoutes')
 const olaRouter = require('./olaRoutes')
+const geoRoutes = require('./geoRoutes')
 
 
 const index = (app) => {
@@ -67,6 +68,7 @@ const index = (app) => {
     highlightRoutes(app)
     mealRoutes(app)
     olaRouter(app)
+    geoRoutes(app)
 
 }
 

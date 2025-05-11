@@ -396,7 +396,8 @@ const getPropertiesSearchResultV2 = async (req, res) => {
 
         const limit = req?.query?.limit ? parseInt(req?.query?.limit) : undefined;
 
-        const response = await propertyServices.getPropertiesSearchResultV2(swlat, swlong, nelat, nelong, filters, page, view, userId, limit)
+        // const response = await propertyServices.getPropertiesSearchResultV2(swlat, swlong, nelat, nelong, filters, page, view, userId, limit)
+        const response = await propertyServices.getPropertiesSearchResultV3(swlat, swlong, nelat, nelong, filters, page, view, userId, limit)
 
 
         //Property Photos
