@@ -12,9 +12,24 @@ const BuilderUpdateRoutes = (app) => {
     app.get(`${prepath}/builderUpdate/builder/:builder_id`, builderUpdateControllers.readAll);
 
     // admin
-    app.post(`${prepath}/admin/builderUpdate`, middlewares.isAuthenticate, builderUpdateControllers.adminCreate);
-    app.put(`${prepath}/admin/builderUpdate/:id`, middlewares.isAuthenticate, builderUpdateControllers.adminUpdate);
-    app.delete(`${prepath}/admin/builderUpdate/:id`, middlewares.isAuthenticate, builderUpdateControllers.adminDestroy);
+    app.post(`${prepath}/admin/builderUpdate`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderUpdateControllers.adminCreate);
+
+
+    app.put(`${prepath}/admin/builderUpdate/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderUpdateControllers.adminUpdate);
+
+
+    app.delete(`${prepath}/admin/builderUpdate/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderUpdateControllers.adminDestroy);
+
+
 
 
 }

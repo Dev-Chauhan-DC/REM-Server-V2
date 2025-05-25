@@ -28,9 +28,9 @@ const create = async (req, res) => {
 }
 const adminCreate = async (req, res) => {
     try {
-        if (!isAdmin(req.user.phone_number)) {
-            return res.status(404).send(badRequest400('You are not authorized'))
-        }
+        // if (!isAdmin(req.user.phone_number)) {
+        //     return res.status(404).send(badRequest400('You are not authorized'))
+        // }
         const data = req.body;
         const response = await agentAddressServices.create(data);
         return res.status(200).send(ok200("created successfully", response))
@@ -105,9 +105,9 @@ const update = async (req, res) => {
 const adminUpdate = async (req, res) => {
     try {
 
-        if (!isAdmin(req.user.phone_number)) {
-            return res.status(404).send(badRequest400('You are not authorized'))
-        }
+        // if (!isAdmin(req.user.phone_number)) {
+        //     return res.status(404).send(badRequest400('You are not authorized'))
+        // }
 
         const data = req.body
         const id = req.params.id
@@ -173,9 +173,9 @@ const destroy = async (req, res) => {
 
 const adminDestroy = async (req, res) => {
     try {
-        if (!isAdmin(req.user.phone_number)) {
-            return res.status(404).send(badRequest400('You are not authorized'))
-        }
+        // if (!isAdmin(req.user.phone_number)) {
+        //     return res.status(404).send(badRequest400('You are not authorized'))
+        // }
 
         const id = req.params.id
 

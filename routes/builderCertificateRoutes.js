@@ -13,9 +13,23 @@ const BuilderCertificateRoutes = (app) => {
 
 
     // admin
-    app.post(`${prepath}/admin/builderCertificate`, middlewares.isAuthenticate, builderCertificateControllers.adminCreate);
-    app.put(`${prepath}/admin/builderCertificate/:id`, middlewares.isAuthenticate, builderCertificateControllers.adminUpdate);
-    app.delete(`${prepath}/admin/builderCertificate/:id`, middlewares.isAuthenticate, builderCertificateControllers.adminDestroy);
+    app.post(`${prepath}/admin/builderCertificate`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderCertificateControllers.adminCreate);
+
+
+    app.put(`${prepath}/admin/builderCertificate/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderCertificateControllers.adminUpdate);
+
+
+    app.delete(`${prepath}/admin/builderCertificate/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderCertificateControllers.adminDestroy);
+
 
 }
 

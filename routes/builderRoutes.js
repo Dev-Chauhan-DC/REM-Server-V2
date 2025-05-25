@@ -15,8 +15,16 @@ const builderRoutes = (app) => {
 
 
     // admin
-    app.put(`${prepath}/builder/:id`, middlewares.isAuthenticate, builderControllers.updateByID);
-    app.delete(`${prepath}/admin/builder/:id`, middlewares.isAuthenticate, builderControllers.adminDestroy);
+    app.put(`${prepath}/builder/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderControllers.updateByID);
+
+
+    app.delete(`${prepath}/admin/builder/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderControllers.adminDestroy);
 
 }
 

@@ -12,9 +12,20 @@ const AgentAddressRoutes = (app) => {
 
 
     // admin
-    app.post(`${prepath}/admin/agentAddress`, middlewares.isAuthenticate, agentAddressControllers.adminCreate);
-    app.put(`${prepath}/admin/agentAddress/:id`, middlewares.isAuthenticate, agentAddressControllers.adminUpdate);
-    app.delete(`${prepath}/admin/agentAddress/:id`, middlewares.isAuthenticate, agentAddressControllers.adminDestroy);
+    app.post(`${prepath}/admin/agentAddress`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        agentAddressControllers.adminCreate);
+
+    app.put(`${prepath}/admin/agentAddress/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        agentAddressControllers.adminUpdate);
+
+    app.delete(`${prepath}/admin/agentAddress/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        agentAddressControllers.adminDestroy);
 
 }
 

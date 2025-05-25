@@ -11,8 +11,15 @@ const agentRoutes = (app) => {
     app.put(`${prepath}/agent`, middlewares.isAuthenticate, agentControllers.update);
 
     // Admin
-    app.put(`${prepath}/agent/:id`, middlewares.isAuthenticate, agentControllers.updateByID);
-    app.delete(`${prepath}/admin/agent/:id`, middlewares.isAuthenticate, agentControllers.adminDestroy);
+    app.put(`${prepath}/agent/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        agentControllers.updateByID);
+
+    app.delete(`${prepath}/admin/agent/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        agentControllers.adminDestroy);
 
 }
 

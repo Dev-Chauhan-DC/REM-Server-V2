@@ -10,9 +10,9 @@ const create = async (data) => {
     }
 }
 
-const findOne = async (where) => {
+const findOne = async (condition) => {
     try {
-        const response = await PhotoCategoryModel.findOne({ where })
+        const response = await PhotoCategoryModel.findOne(condition)
         return response
     } catch (e) {
         throw e;

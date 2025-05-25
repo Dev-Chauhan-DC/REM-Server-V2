@@ -12,9 +12,24 @@ const builderTeamRoutes = (app) => {
 
 
     // admin
-    app.post(`${prepath}/admin/builderTeams`, middlewares.isAuthenticate, builderTeamControllers.adminCreate);
-    app.put(`${prepath}/admin/builderTeams/:id`, middlewares.isAuthenticate, builderTeamControllers.adminUpdate);
-    app.delete(`${prepath}/admin/builderTeams/:id`, middlewares.isAuthenticate, builderTeamControllers.adminDestroy);
+    app.post(`${prepath}/admin/builderTeams`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderTeamControllers.adminCreate);
+
+
+    app.put(`${prepath}/admin/builderTeams/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderTeamControllers.adminUpdate);
+
+
+    app.delete(`${prepath}/admin/builderTeams/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderTeamControllers.adminDestroy);
+
+
 
 }
 

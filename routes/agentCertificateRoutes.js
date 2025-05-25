@@ -13,9 +13,20 @@ const AgentCertificateRoutes = (app) => {
 
 
     // admin
-    app.post(`${prepath}/admin/agentCertificate`, middlewares.isAuthenticate, agentCertificateControllers.adminCreate);
-    app.put(`${prepath}/admin/agentCertificate/:id`, middlewares.isAuthenticate, agentCertificateControllers.adminUpdate);
-    app.delete(`${prepath}/admin/agentCertificate/:id`, middlewares.isAuthenticate, agentCertificateControllers.adminDestroy);
+    app.post(`${prepath}/admin/agentCertificate`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        agentCertificateControllers.adminCreate);
+
+    app.put(`${prepath}/admin/agentCertificate/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        agentCertificateControllers.adminUpdate);
+
+    app.delete(`${prepath}/admin/agentCertificate/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        agentCertificateControllers.adminDestroy);
 
 
 }

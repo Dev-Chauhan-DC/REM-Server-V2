@@ -2,7 +2,8 @@ const jwt = require("jsonwebtoken")
 const UserModel = require("../models/index").users
 const responseUtilities = require("../utilities/responseUtilities");
 const responses = new responseUtilities()
-const userServices = require("../services/userServices.js")
+const userServices = require("../services/userServices.js");
+const { ENUM } = require("sequelize");
 
 
 const isAuthenticate = async (req, res, next) => {
@@ -151,4 +152,23 @@ const authenticateSocket = async (socket, next) => {
 };
 
 
-module.exports = { authenticateSocket, isAuthenticate, isUserSubscriptionActive, checkSubscription, isAuthenticateWithNext }
+const checkRole = (roles) => {
+    return (req, res, next) => {
+
+        if (roles.includes(req.user.user_roles_id)) {
+            return next();
+        }
+
+        return res.status(404).send(responses.forbidden403("Insufficient role", null))
+    };
+}
+
+const RolesEnum = Object.freeze({
+    user: 1,
+    builder: 2,
+    agent: 3,
+    admin: 4
+});
+
+
+module.exports = { RolesEnum, checkRole, authenticateSocket, isAuthenticate, isUserSubscriptionActive, checkSubscription, isAuthenticateWithNext }

@@ -110,8 +110,6 @@ const verifyOtp = async (req, res) => {
     }
     const formatedPhone = phoneNumber.format('E.164');
     try {
-        const { ENV, TESTING_OTP } = process.env;
-
 
         // if (ENV !== "development") {
         //     if (TESTING_OTP != otp) {
@@ -127,16 +125,23 @@ const verifyOtp = async (req, res) => {
         //     }
 
         // }
-        if (ENV !== "development") {
-            if (TESTING_OTP != otp) {
-                const verifyOtp = await otpVerification.verifyOtp(formatedPhone, otp)
+        // if (ENV !== "development") {
+        //     if (TESTING_OTP != otp) {
+        //         const verifyOtp = await otpVerification.verifyOtp(formatedPhone, otp)
 
-                if (!verifyOtp.status) {
-                    return res.status(400).send(badRequest400(verifyOtp.message))
-                }
-            }
+        //         if (!verifyOtp.status) {
+        //             return res.status(400).send(badRequest400(verifyOtp.message))
+        //         }
+        //     }
 
+        // }
+        // if (ENV !== "development") {
+        const verifyOtp = await otpVerification.verifyOtp(formatedPhone, otp)
+
+        if (!verifyOtp.status) {
+            return res.status(400).send(badRequest400(verifyOtp.message))
         }
+        // }
 
 
         const isPhonePresent = await authServices.readPhone(formatedPhone);

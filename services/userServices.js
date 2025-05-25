@@ -90,7 +90,35 @@ const update = async (data, condition) => {
 }
 
 
+const findOne = async (condition) => {
+    try {
+        const response = await UserModel.findOne(condition)
+        return response
+    } catch (e) {
+        throw e;
+    }
+}
+
+const create = async (data) => {
+    try {
+        const response = await UserModel.create(data)
+        return response
+    } catch (e) {
+        throw e;
+    }
+}
+
+const destroy = async (condition) => {
+    try {
+        const response = await UserModel.destroy(condition);
+        return response;
+    } catch (e) {
+        throw e;
+    }
+}
 
 
 
-module.exports = { update, updateRole, getUser, updateProfileInfo, findOneUser }
+
+
+module.exports = { destroy, create, findOne, update, updateRole, getUser, updateProfileInfo, findOneUser }

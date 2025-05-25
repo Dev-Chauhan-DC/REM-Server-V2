@@ -19,9 +19,9 @@ const create = async (req, res) => {
         // if (isUserId) {
         //     return res.status(400).send(badRequest400("You already have an agent profile"))
         // }
-        if (!isAdmin(req.user.phone_number)) {
-            return res.status(404).send(badRequest400('You are not authorized'))
-        }
+        // if (!isAdmin(req.user.phone_number)) {
+        //     return res.status(404).send(badRequest400('You are not authorized'))
+        // }
 
         const data = req.body;
         // data.user_id = req.user.id;
@@ -154,9 +154,9 @@ const updateByID = async (req, res) => {
     try {
 
 
-        if (!isAdmin(req.user.phone_number)) {
-            return res.status(404).send(badRequest400('You are not authorized'))
-        }
+        // if (!isAdmin(req.user.phone_number)) {
+        //     return res.status(404).send(badRequest400('You are not authorized'))
+        // }
 
 
 
@@ -174,9 +174,9 @@ const updateByID = async (req, res) => {
 
 const adminDestroy = async (req, res) => {
     try {
-        if (!isAdmin(req.user.phone_number)) {
-            return res.status(404).send(badRequest400('You are not authorized'))
-        }
+        // if (!isAdmin(req.user.phone_number)) {
+        //     return res.status(404).send(badRequest400('You are not authorized'))
+        // }
 
         const id = parseInt(req.params.id);
 

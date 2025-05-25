@@ -13,9 +13,20 @@ const BuilderAddressRoutes = (app) => {
 
 
     // admin
-    app.post(`${prepath}/admin/builderAddress`, middlewares.isAuthenticate, builderAddressControllers.adminCreate);
-    app.put(`${prepath}/admin/builderAddress/:id`, middlewares.isAuthenticate, builderAddressControllers.adminUpdate);
-    app.delete(`${prepath}/admin/builderAddress/:id`, middlewares.isAuthenticate, builderAddressControllers.adminDestroy);
+    app.post(`${prepath}/admin/builderAddress`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderAddressControllers.adminCreate);
+
+    app.put(`${prepath}/admin/builderAddress/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderAddressControllers.adminUpdate);
+
+    app.delete(`${prepath}/admin/builderAddress/:id`,
+        middlewares.isAuthenticate,
+        middlewares.checkRole([middlewares.RolesEnum.admin]),
+        builderAddressControllers.adminDestroy);
 }
 
 
