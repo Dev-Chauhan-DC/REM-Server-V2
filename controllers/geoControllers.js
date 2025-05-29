@@ -13,41 +13,43 @@ const autocomplete = async (req, res) => {
     const query = req.query.query;
 
     try {
-        // Try Photon
-        const photonResult = await photonWebhook.autocomplete({ q: query, limit: 4, bbox: '68.07,6.75,97.42,37.10' });
-        const formattedPhoton = photonToGoogleFormat(photonResult?.features);
 
-        if (formattedPhoton.length > 0) {
-            return res.status(200).send(ok200("sent", formattedPhoton));
+        // Try Google
+        const googleResult = await googleGeoWebhook.autocomplete({ input: query, fields: 'name,place_id' });
+        const formattedGoogle = googleToGoogleFormat(googleResult);
+
+        if (formattedGoogle.length > 0) {
+            return res.status(200).send(ok200("sent", formattedGoogle));
         }
 
-        throw new Error('Photon returned empty array');
+        throw new Error('Google returned empty array');
 
     } catch (error) {
-        console.error('Photon error:', error);
+        console.error('Google error:', error);
 
         try {
-            // Try Nominatim
-            const nominatimResult = await nominatimWebhook.autocomplete({ q: query, format: 'json', countrycodes: 'in', limit: 4 });
-            const formattedNominatim = nominatimToGoogleFormat(nominatimResult);
 
-            if (formattedNominatim.length > 0) {
-                return res.status(200).send(ok200("sent", formattedNominatim));
+            // Try Photon
+            const photonResult = await photonWebhook.autocomplete({ q: query, limit: 4, bbox: '68.07,6.75,97.42,37.10' });
+            const formattedPhoton = photonToGoogleFormat(photonResult?.features);
+
+            if (formattedPhoton.length > 0) {
+                return res.status(200).send(ok200("sent", formattedPhoton));
             }
 
-            throw new Error('Nominatim returned empty array');
+            throw new Error('Photon returned empty array');
 
         } catch (error) {
-            console.error('Nominatim error:', error);
+            console.error('Photon error:', error);
 
             try {
-                // Try Google
-                const googleResult = await googleGeoWebhook.autocomplete({ input: query, fields: 'name,place_id' });
-                const formattedGoogle = googleToGoogleFormat(googleResult);
+                // Try Nominatim
+                const nominatimResult = await nominatimWebhook.autocomplete({ q: query, format: 'json', countrycodes: 'in', limit: 4 });
+                const formattedNominatim = nominatimToGoogleFormat(nominatimResult);
 
-                return res.status(200).send(ok200("sent", formattedGoogle));
+                return res.status(200).send(ok200("sent", formattedNominatim));
             } catch (error) {
-                console.error('Google error:', error);
+                console.error('Nominatim error:', error);
                 return res.status(500).send(internalServerError500("error", error));
             }
         }
