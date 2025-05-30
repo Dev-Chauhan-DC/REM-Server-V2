@@ -77,7 +77,7 @@ function nominatimToGoogleFormat(data) {
 }
 
 function googleToGoogleFormat(data) {
-    return (data.predictions || []).map(item => ({
+    return (data?.predictions || []).map(item => ({
         description: item.description || '',
         place_id: item.place_id || '',
         provider: 'google'

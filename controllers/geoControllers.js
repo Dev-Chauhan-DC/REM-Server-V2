@@ -11,15 +11,18 @@ const { photonToGoogleFormat, nominatimToGoogleFormat, googleToGoogleFormat } = 
 
 const autocomplete = async (req, res) => {
     const query = req.query.query;
+    const free = JSON.parse(req?.query?.free || 'false');
 
     try {
 
-        // Try Google
-        const googleResult = await googleGeoWebhook.autocomplete({ input: query, fields: 'name,place_id' });
-        const formattedGoogle = googleToGoogleFormat(googleResult);
+        if (!free) {
+            // Try Google
+            const googleResult = await googleGeoWebhook.autocomplete({ input: query, fields: 'name,place_id' });
+            const formattedGoogle = googleToGoogleFormat(googleResult);
 
-        if (formattedGoogle.length > 0) {
-            return res.status(200).send(ok200("sent", formattedGoogle));
+            if (formattedGoogle.length > 0) {
+                return res.status(200).send(ok200("sent", formattedGoogle));
+            }
         }
 
         throw new Error('Google returned empty array');
