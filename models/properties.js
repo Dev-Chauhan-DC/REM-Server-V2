@@ -170,6 +170,8 @@ module.exports = (sequelize, DataTypes) => {
     triple_sharing: DataTypes.INTEGER,
     four_sharing: DataTypes.INTEGER,
     notice_period_id: DataTypes.INTEGER,
+    show_phone: DataTypes.BOOLEAN,
+
   }, {
     sequelize,
     modelName: 'properties',

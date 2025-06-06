@@ -1,9 +1,11 @@
 const propertyServices = require("../services/propertyServices");
+const userServices = require("../services/userServices.js");
 const responseUtilities = require('../utilities/responseUtilities');
 const { s3ReadUrl } = require("../utilities/s3");
 const { isNumber } = require("../utilities/validator");
 const responses = new responseUtilities()
-const { ok200, badRequest400, internalServerError500 } = require('../utilities/responseUtility.js')
+const { ok200, badRequest400, internalServerError500 } = require('../utilities/responseUtility.js');
+const { where } = require("sequelize");
 
 
 const createProperty = async (req, res) => {
@@ -612,9 +614,28 @@ const listings = async (req, res) => {
     }
 }
 
+const getPhone = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { show_phone, user_id } = await propertyServices.findOne({ where: { id } })
+
+        if (!show_phone) {
+            return res.status(400).send(badRequest400())
+        }
+
+        const { phone_number } = await userServices.findOne({ where: { id: user_id } })
+
+        return res.status(200).send(ok200("sent successfully", phone_number))
+    } catch (error) {
+        console.error(error)
+        return res.status(500).send(internalServerError500())
+    }
+}
+
 
 module.exports = {
     createProperty, getUserProperties, deleteProperty,
     getPropertiesSearchResult, getProperty, getProperties,
-    update, listings, getPropertiesSearchResultV2, getPropertyV2, getUserPropertiesV2
+    update, listings, getPropertiesSearchResultV2, getPropertyV2, getUserPropertiesV2,
+    getPhone
 }

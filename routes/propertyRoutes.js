@@ -25,6 +25,10 @@ const propertyRoutes = (app) => {
 
     app.post(`${prepath}/property`, propertyControllers.getProperty);
 
+    app.get(`${prepath}/property/get-phone/:id`,
+        middlewares.isAuthenticateWithNext,
+        propertyControllers.getPhone);
+
     app.get(`${prepath}/property/:id`,
         middlewares.isAuthenticateWithNext,
         propertyControllers.getPropertyV2);

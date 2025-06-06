@@ -630,6 +630,15 @@ const getPropertyV2 = async (propertyId, view, userId) => {
             ]
         },
         {
+            model: UserModel,
+            attributes: ["user_roles_id", "id"],
+            include: [
+                {
+                    model: UserRolesModel
+                }
+            ]
+        },
+        {
             model: PurposeModel,
         },
         {

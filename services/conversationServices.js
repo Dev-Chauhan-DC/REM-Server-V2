@@ -39,26 +39,72 @@ const destroy = async (condition) => {
     }
 }
 
+// const createIfNotPresent = async (user1_id, user2_id) => {
+//     try {
+//         let conversation = await ConversationModel.findOne({
+//             where: {
+//                 [Op.or]: [
+//                     { user1_id, user2_id },
+//                     { user1_id: user2_id, user2_id: user1_id } // Check reversed order
+//                 ]
+//             },
+//             attributes: { exclude: ['createdAt', 'updatedAt'] },
+//             include: [
+//                 {
+//                     model: UserModel,
+//                     attributes: ['id', 'first_name'],
+//                     as: 'user1',
+//                 },
+//                 {
+//                     model: UserModel,
+//                     attributes: ['id', 'first_name'],
+//                     as: 'user2',
+//                 }
+//             ]
+//         });
+
+//         if (!conversation) {
+//             conversation = await ConversationModel.create({ user1_id, user2_id });
+//         }
+
+//         return conversation;
+//     } catch (error) {
+//         throw error;
+//     }
+// };
+
 const createIfNotPresent = async (user1_id, user2_id) => {
-    try {
-        let conversation = await ConversationModel.findOne({
-            where: {
-                [Op.or]: [
-                    { user1_id, user2_id },
-                    { user1_id: user2_id, user2_id: user1_id } // Check reversed order
-                ]
-            }
+    const condition = {
+        [Op.or]: [
+            { user1_id, user2_id },
+            { user1_id: user2_id, user2_id: user1_id }
+        ]
+    };
+
+    let conversation = await ConversationModel.findOne({
+        where: condition,
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
+        include: [
+            { model: UserModel, attributes: ['id', 'first_name'], as: 'user1' },
+            { model: UserModel, attributes: ['id', 'first_name'], as: 'user2' }
+        ]
+    });
+
+    if (!conversation) {
+        await ConversationModel.create({ user1_id, user2_id });
+        conversation = await ConversationModel.findOne({
+            where: condition,
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+            include: [
+                { model: UserModel, attributes: ['id', 'first_name'], as: 'user1' },
+                { model: UserModel, attributes: ['id', 'first_name'], as: 'user2' }
+            ]
         });
-
-        if (!conversation) {
-            conversation = await ConversationModel.create({ user1_id, user2_id });
-        }
-
-        return conversation;
-    } catch (error) {
-        throw error;
     }
+
+    return conversation;
 };
+
 
 const getConversationsByUser = async (userId) => {
     try {

@@ -48,6 +48,7 @@ const autocomplete = async (params) => {
         const result = await axios.get(process.env.GOOGLE_MAPS_URL + '/maps/api/place/autocomplete/json', {
             params: {
                 key: process.env.GOOGLE_MAP_API,
+                components: 'country:in',
                 ...params
             },
         });
