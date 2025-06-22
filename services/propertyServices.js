@@ -144,18 +144,25 @@ const getUserProperties = async (userId, page, ALimit) => {
 
 }
 
-const getUserPropertiesV2 = async (userId, page, ALimit) => {
+const getUserPropertiesV2 = async (userId, page, ALimit, params) => {
 
     try {
         const limit = ALimit ? ALimit : 3
         const offset = (page - 1) * limit;
+
+        let where = {
+            user_id: userId,
+        };
+
+        if (params.search) {
+            where.address = { [Op.like]: `%${params.search}%` };
+        }
+
         const { count, rows } = await PropertyModel.findAndCountAll({
             distinct: true,
             limit: limit,
             offset: offset,
-            where: {
-                user_id: userId
-            },
+            where: where,
             attributes: ["home_types_id", "id", "price", "price_on_demand", "bedroom_count", "bathroom_count", "hall_count", "kitchen_count", "balcony_count", "built_up_area", "address", "landmark", "area", "pincode", "city", "state", "createdAt"],
             include: [
                 {
@@ -1202,6 +1209,7 @@ const getPropertiesSearchResultV3 = async (swlat, swlong, nelat, nelong, filters
             ...(filters.project_type_id ? { project_type_id: { [Op.in]: filters.project_type_id } } : {}),
             ...(filters.tenantsId ? { tenants_id: { [Op.in]: filters.tenantsId } } : {}),
             ...(filters.builder_id ? { builder_id: { [Op.in]: filters.builder_id } } : {}),
+            ...(filters.agent_id ? { agent_id: { [Op.in]: filters.agent_id } } : {}),
         };
 
         // Fetch properties (all results, filter in includes works)

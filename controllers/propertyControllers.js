@@ -116,8 +116,13 @@ const getUserPropertiesV2 = async (req, res) => {
         //pagination page
         const page = req.query.page && isNumber(req.query.page) ? parseInt(req.query.page) : 1;
         const limit = req?.query?.limit ? parseInt(req.query.limit) : null;
+        const search = req?.query?.search;
 
-        const response = await propertyServices.getUserPropertiesV2(userId, page, limit);
+        const params = {
+            search
+        }
+
+        const response = await propertyServices.getUserPropertiesV2(userId, page, limit, params);
 
         for (let i = 0; i < response.data.length; i++) {
             for (let j = 0; j < response.data[i].property_photos.length; j++) {
@@ -345,6 +350,7 @@ const getPropertiesSearchResultV2 = async (req, res) => {
         const project_type_id = req.query.project_type_id ? (req.query.project_type_id).split(",").map(Number) : undefined
         const tenantsId = req.query.tenantsId ? (req.query.tenantsId).split(",").map(Number) : undefined
         const builder_id = req.query.builder_id ? (req.query.builder_id).split(",").map(Number) : undefined
+        const agent_id = req.query.agent_id ? (req.query.agent_id).split(",").map(Number) : undefined
 
 
         const sorting = req.query.sorting ? req.query.sorting.split("-") : undefined
@@ -386,6 +392,7 @@ const getPropertiesSearchResultV2 = async (req, res) => {
             project_type_id,
             tenantsId,
             builder_id,
+            agent_id,
             sorting
 
         }
@@ -616,14 +623,18 @@ const listings = async (req, res) => {
 
 const getPhone = async (req, res) => {
     try {
-        const id = req.params.id;
-        const { show_phone, user_id } = await propertyServices.findOne({ where: { id } })
+        const id = parseInt(req?.params?.id);
 
-        if (!show_phone) {
+
+        // const { show_phone, user_id } = await propertyServices.findOne({ where: { id } })
+        const result = await propertyServices.findOne({ where: { id } });
+
+
+        if (!result?.show_phone) {
             return res.status(400).send(badRequest400())
         }
 
-        const { phone_number } = await userServices.findOne({ where: { id: user_id } })
+        const { phone_number } = await userServices.findOne({ where: { id: result.user_id } })
 
         return res.status(200).send(ok200("sent successfully", phone_number))
     } catch (error) {
